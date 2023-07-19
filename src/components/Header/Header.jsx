@@ -2,9 +2,9 @@ import { View, StyleSheet, StatusBar } from "react-native";
 import constants from "expo-constants";
 import COLORS from "../../theme/colors";
 import colors from "../../theme/colors";
-import CustomText from "../CustomText/CustomText.jsx"
+import CustomText from "../CustomText/index.jsx"
 
-function Header({ children, title }) {
+function Header({ children, title, actionButton }) {
   const secureMinHeight = constants.statusBarHeight;
 
   const styles = StyleSheet.create({
@@ -13,18 +13,17 @@ function Header({ children, title }) {
       height: secureMinHeight + 70,
       justifyContent: "flex-end",
       paddingBottom: 10,
-      marginBottom: 25,
     },
     headerContainer: {
       paddingHorizontal: 15,
       justifyContent: "space-between",
       flexDirection: "row",
+      alignItems: "flex-end"
     },
     title: {
       color: colors.foreground.white,
       fontWeight: 500,
       fontSize: 30,
-      bottom: 0,
       textTransform: "uppercase"
     },
   });

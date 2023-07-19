@@ -1,0 +1,113 @@
+[
+    {
+        "amount": [
+            60,
+            65,
+            70
+        ],
+        "name": "Sentadilla con barra",
+        "rest": [
+            60,
+            60,
+            60
+        ],
+        "sets": [
+            12,
+            10,
+            8
+        ]
+    },
+    {
+        "amount": [
+            20,
+            22.5,
+            25
+        ],
+        "name": "Press militar",
+        "rest": [
+            60,
+            60,
+            60
+        ],
+        "sets": [
+            15,
+            12,
+            10
+        ]
+    },
+    {
+        "amount": [
+            50,
+            50,
+            55
+        ],
+        "name": "Curl de piernas en máquina",
+        "rest": [
+            60,
+            60,
+            60
+        ],
+        "sets": [
+            15,
+            15,
+            12
+        ]
+    },
+    {
+        "amount": [
+            0,
+            0,
+            0
+        ],
+        "name": "Abdominales",
+        "rest": [
+            30,
+            30,
+            30
+        ],
+        "sets": [
+            20,
+            20,
+            20
+        ]
+    },
+    {
+        "amount": [
+            80,
+            85,
+            90
+        ],
+        "name": "Prensa de piernas",
+        "rest": [
+            60,
+            60,
+            60
+        ],
+        "sets": [
+            12,
+            10,
+            8
+        ]
+    },
+    {
+        "amount": [
+            20,
+            22.5,
+            25,
+            30
+        ],
+        "name": "Press de hombros con barra",
+        "rest": [
+            60,
+            60,
+            60,
+            60
+        ],
+        "sets": [
+            12,
+            10,
+            10,
+            8
+        ]
+    }
+]

@@ -6,20 +6,18 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import colors from "../../theme/colors";
 import { icons } from "../../theme/icons";
-import CustomText from "../CustomText/CustomText";
+import CustomText from "../CustomText";
 
-const InputTextLabeled = ({ label, error, Button, onChangeText }) => {
-
+const InputTextLabeled = ({ label, error, Button, onChangeText, containerBackgroundColor, value="", style }) => {
   const [textInputValue, setTextInputValue] = useState("")
 
   const styles = StyleSheet.create({
     container: {
-      paddingTop: 20,
-      padding: 10,
-      paddingHorizontal: 15,
+      width: "100%",
+      height: 55
     },
     fieldContainer: {
       borderRadius: 5,
@@ -40,9 +38,10 @@ const InputTextLabeled = ({ label, error, Button, onChangeText }) => {
     },
     labelContainer: {
       position: "absolute",
-      marginLeft: 30,
+      marginLeft: 10,
+      top: -20,
       marginTop: 10,
-      backgroundColor: colors.background.primary,
+      backgroundColor: containerBackgroundColor,
       zIndex: 2,
       paddingHorizontal: 5,
       flexDirection: "row",
@@ -58,6 +57,10 @@ const InputTextLabeled = ({ label, error, Button, onChangeText }) => {
       tintColor: "#ffffff",
     },
   });
+
+  useEffect(()=>{
+    setTextInputValue(value)
+  }, [value])
 
   const handleOnTextInputChange = (text) => {
     setTextInputValue(text)
@@ -78,7 +81,7 @@ const InputTextLabeled = ({ label, error, Button, onChangeText }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...style}}>
       <View style={styles.labelContainer}>
         <CustomText style={styles.label} text={label} />
       </View>

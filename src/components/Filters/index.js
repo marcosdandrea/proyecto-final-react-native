@@ -1,6 +1,6 @@
 import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native"
 import colors from "../../theme/colors"
-import CustomText from "../CustomText/CustomText"
+import CustomText from "../CustomText"
 
 const FilterElement = ({label, onPress, selected}) => {
 
@@ -57,7 +57,6 @@ const Filters = ({filterList, onPress, selected}) => {
                 onPress={onPress}
                 selected={selected}/>}
             data={filterList}/>
-
     </View> 
     );
 }

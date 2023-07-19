@@ -1,18 +1,14 @@
 import { StyleSheet, View } from "react-native";
-import MenuBar from "./components/MenuBar";
 import { SectionContextProvider } from "./contexts/SectionContext";
-import Sections from "./components/Sections";
 import { DatabaseContextProvider } from "./contexts/DatabaseContext";
 import FontProvider from "../assets/fonts/FontProvider";
+import 'react-native-random-uuid'
+import { RootNavigator } from "./navigation";
 
 export default function App() {
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: "column",
-      justifyContent: "space-between",
-      alignItems: "center",
-      justifyContent: "center",
+      flex: 1      
     },
   });
 
@@ -21,8 +17,7 @@ export default function App() {
       <View style={styles.container}>
         <DatabaseContextProvider>
           <SectionContextProvider>
-            <Sections />
-            <MenuBar />
+            <RootNavigator/>
           </SectionContextProvider>
         </DatabaseContextProvider>
       </View>
