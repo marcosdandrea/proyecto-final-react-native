@@ -3,7 +3,9 @@ import { SectionContextProvider } from "./contexts/SectionContext";
 import { DatabaseContextProvider } from "./contexts/DatabaseContext";
 import FontProvider from "../assets/fonts/FontProvider";
 import 'react-native-random-uuid'
-import { RootNavigator } from "./navigation";
+import { Provider } from "react-redux";
+import {store} from "./store"
+import RootNavigator from "./navigation/RootNavigation";
 
 export default function App() {
   const styles = StyleSheet.create({
@@ -14,6 +16,7 @@ export default function App() {
 
   return (
     <FontProvider>
+      <Provider store={store}>
       <View style={styles.container}>
         <DatabaseContextProvider>
           <SectionContextProvider>
@@ -21,6 +24,7 @@ export default function App() {
           </SectionContextProvider>
         </DatabaseContextProvider>
       </View>
+      </Provider>
     </FontProvider>
   );
 }

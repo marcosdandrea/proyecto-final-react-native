@@ -1,17 +1,29 @@
 export default COLORS = {
-    foreground:{
-        primary: "#ec4019",
-        secondary: "#008D1F",
-        error: "#ed5b01",
-        black: "#1B1B1B",
-        informative: "#8d8d8d",
-        white: "#ffffff"
-    },
-    background: {
-        primary: "#2C2C2E",
-        secondary: "#161616",
-        disabled: "#787878",
-        backdrop: "#ECF6FE",
-        container: "#fefefe"
-    }
-}
+  foreground: {
+    primary: "#D83814",
+    secondary: "#008D1F",
+    terciary: "#9B2792",
+    error: "#ed4c01",
+    warning: "#ffc800",
+    black: "#1F2729",
+    informative: "#D1D6DA",
+    white: "#ffffff",
+  },
+  background: {
+    primary: "#131314",
+    secondary: "#2C383A",
+    terciary: "#263032",
+    disabled: "#5f5f5f",
+    backdrop: "#c3c3c3",
+    container: "#fefefe",
+  },
+  palette:{
+    pureRed: "#D60000",
+    fandango: "#B6259B",
+    electricViolet: "#8921F1",
+    byzantineBlue: "#2554D6",
+    forestGreen: "#008D1F",
+    princentonOrange: "#FF9100",
+    emerald: "#39CC8A",
+  }
+};

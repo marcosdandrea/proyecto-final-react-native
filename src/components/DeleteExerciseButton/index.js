@@ -1,32 +1,44 @@
 import IconButton from "../IconButton";
-import { useContext } from "react";
 import { Alert } from "react-native";
-import DatabaseContext from "../../contexts/DatabaseContext";
 import { icons } from "../../theme/icons";
+import { removeExercise } from "../../store/exercises/exercises.slice";
+import { useDispatch } from "react-redux";
+import colors from "../../theme/colors";
 
-const DeleteExercise = ({navigation, route }) => {
-    const { deleteExercise } = useContext(DatabaseContext)
-  
-    const handleOnDeleteExercise = () => {
-        const exerciseID = route.params.exerciseID
-        console.log (exerciseID)
-        Alert.alert("Delete exercise", "Are you shure about to delete this exercise",[
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-            {text: 'OK', onPress: () => {
-                deleteExercise({exerciseID})
-                navigation.goBack()
-            }},
-          ]);
-    
-    }
-  
-    return(
-      <IconButton onPress={handleOnDeleteExercise} icon={icons.delete}/>
-    )
-  }
+const DeleteExercise = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const { exercise } = route.params;
 
-  export default DeleteExercise
+  const handleOnDeleteExercise = () => {
+    Alert.alert(
+      "Delete exercise",
+      "Are you shure about to delete this exercise",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            //deleteExercise({exerciseID})
+            dispatch(removeExercise(exercise));
+            navigation.goBack();
+          },
+        },
+      ]
+    );
+  };
+
+  return (
+    <IconButton
+      onPress={handleOnDeleteExercise}
+      icon={icons.delete}
+      iconTintColor={colors.foreground.informative}
+      backgroundColor={colors.background.secondary}
+    />
+  );
+};
+
+export default DeleteExercise;

@@ -1,33 +1,40 @@
 import {
   View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Image,
+  FlatList
 } from "react-native";
 import InputTextLabeled from "../../components/InputTextLabeled";
 import colors from "../../theme/colors";
-import { useState, useContext, useEffect } from "react";
-import DatabaseContext from "../../contexts/DatabaseContext";
-import { icons } from "../../theme/icons";
-import { LinearGradient } from "expo-linear-gradient";
-import {CustomText, ExerciseItem, Filters} from "../../components"
-
+import { useState, useEffect } from "react";
+import {Filters} from "../../components"
+import ExerciseItem from "../../components/ExerciseItem";
+import { useSelector } from "react-redux";
+import styles from "./styles";
 
 
 const Exercises = ({ navigation }) => {
-  const { exercises, categories } = useContext(DatabaseContext);
+  const _exercises = useSelector((state)=> state.exercises.items)
+  const categories = useSelector((state)=> state.exercises.categories)
+  const [exercises, setExercises] = useState()
 
   //filters
   const [filterByName, setFilterByName] = useState("");
   const [filterByCategory, setFilterByCategory] = useState("");
-
   //filtered Exercises
   const [filteredExercises, setFilteredExercises] = useState([]);
 
-  useEffect(()=> setFilteredExercises(runFilters(exercises)), [exercises, filterByName, filterByCategory])
+  useEffect(()=>{
+    const allExercises = Object.keys(_exercises).map(key => {
+      const category = {category: {...categories[_exercises[key].category], key: _exercises[key].category}}
+      const exercise = {..._exercises[key], ...category, key}
+      return exercise
+    })
+    setExercises(allExercises)
+  }, [_exercises])
 
-  const runFilters = (exercisesToFilter) => {
+  useEffect(()=> setFilteredExercises(runAllFilters(exercises)), [exercises, filterByName, filterByCategory])
+
+  const runAllFilters = (exercisesToFilter) => {
+    if (!exercises) return
     let exercisesFiltered = [...exercisesToFilter]
     if (filterByCategory!="") exercisesFiltered = runFilterByCategory(exercisesFiltered)
     if (filterByName != "") exercisesFiltered = runFilterByName(exercisesFiltered)
@@ -35,7 +42,8 @@ const Exercises = ({ navigation }) => {
   }
 
   const runFilterByCategory = (exercisesToFilter) => {
-      return exercisesToFilter.filter(ex => ex.category == filterByCategory)
+    console.log (exercisesToFilter)
+      return exercisesToFilter.filter(ex => ex.category.key == filterByCategory)
   }
 
   const runFilterByName = (exercisesToFilter) => {
@@ -46,24 +54,6 @@ const Exercises = ({ navigation }) => {
     })
   }
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background.primary,
-      paddingTop: 15,
-    },
-    exerciseList: {},
-    exerciseListContainer: {
-      paddingHorizontal: 15,
-      rowGap: 8,
-      paddingBottom: 8,
-    },
-    inputFilterContainer:{
-      paddingHorizontal: 15,
-      paddingTop: 15,
-      paddingBottom: 5
-    }
-  });
 
   return (
     <View style={styles.container}>

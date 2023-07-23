@@ -1,7 +1,7 @@
 import { TouchableOpacity, Image } from "react-native";
 import colors from "../../theme/colors";
 
-const IconButton = ({onPress, backgroundColor=colors.foreground.primary, icon, size=20}) => {
+const IconButton = ({onPress, backgroundColor=colors.foreground.primary, icon, iconTintColor=colors.foreground.white, size=20}) => {
 
   const styles = {
     image:{
@@ -23,7 +23,7 @@ const IconButton = ({onPress, backgroundColor=colors.foreground.primary, icon, s
         }}>
         <Image 
         style={styles.image} 
-        tintColor="white"
+        tintColor={iconTintColor}
         source={icon}/>
       </TouchableOpacity>
     );

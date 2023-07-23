@@ -6,7 +6,7 @@ export default styles = StyleSheet.create({
     container: {
       height: 80,
       width: Dimensions.get("window").width - 45,
-      backgroundColor: colors.foreground.primary,
+      backgroundColor: colors.foreground.terciary,
       borderRadius: 5,
       marginRight: 15,
       padding: 10,

@@ -1,29 +1,30 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, Button, TouchableOpacity } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import { useContext, useEffect, useState } from "react";
-import DatabaseContext from "../../contexts/DatabaseContext";
-import {InputTextLabeled} from "../../components";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { InputTextLabeled, StandarIconButton } from "../../components";
 import colors from "../../theme/colors";
+import { styles } from "./styles";
+import { saveExercise } from "../../store/exercises/exercises.slice";
+import uuid from "react-native-uuid";
+import { icons } from "../../theme/icons";
 
 const EditExercise = ({ navigation, route }) => {
-  const { exerciseID } = route.params || { exerciseID: undefined };
-  const { getSingleExercise, categories, saveExercise } = useContext(DatabaseContext);
+  const dispatch = useDispatch();
 
-  const [exerciseName, setExerciseName] = useState();
-  const [exerciseCategory, setExerciseCategory] = useState();
-  const [exerciseDescription, setExerciseDescription] = useState();
-  const [exerciseUnit, setExerciseUnit] = useState();
-  const [exerciseIncrement, setExerciseIncrement] = useState();
+  const { exercise } = route.params || { exercise: undefined };
+  const _categories = useSelector((state) => state.exercises.categories);
+  const [categories, setCategories] = useState([])
 
-  useEffect(() => {
-    if (!exerciseID) return;
-    const exerciseData = getSingleExercise(exerciseID);
-    setExerciseName(exerciseData.name)
-    setExerciseCategory(exerciseData.category)
-    setExerciseDescription(exerciseData.description)
-    setExerciseUnit(exerciseData.unit)
-    setExerciseIncrement(exerciseData.increment)
-}, [exerciseID]);
+  const [exerciseName, setExerciseName] = useState(exercise.name);
+  const [exerciseCategory, setExerciseCategory] = useState(exercise.category.name);
+  const [exerciseDescription, setExerciseDescription] = useState(exercise.description);
+  const [exerciseUnit, setExerciseUnit] = useState(exercise.unit);
+  const [exerciseIncrement, setExerciseIncrement] = useState(exercise.increment);
+
+  useEffect(()=>{
+    const newCategories = Object.keys()
+  }, [_categories])
 
   const handleSaveExercise = () => {
     const data = {
@@ -32,46 +33,11 @@ const EditExercise = ({ navigation, route }) => {
       category: exerciseCategory,
       unit: exerciseUnit,
       increment: exerciseIncrement,
+      key: exercise.key || uuid.v4(),
     };
-    saveExercise({exerciseID, data});
-    navigation.goBack()
+    dispatch(saveExercise(data));
+    navigation.goBack();
   };
-
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: colors.background.secondary,
-      paddingHorizontal: 20,
-      rowGap: 10,
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    label: {
-      fontFamily: "Poppins-Regular",
-      color: colors.foreground.informative,
-    },
-    dropdown: {
-      button: {
-        backgroundColor: colors.background.primary,
-        height: 40,
-        width: "100%",
-      },
-      text: {
-        fontFamily: "Poppins-Regular",
-        color: colors.foreground.white,
-      },
-      list: {
-        backgroundColor: colors.background.primary,
-      },
-      text: {
-        color: colors.foreground.white,
-        fontFamily: "Poppins-Regular",
-      },
-    },
-    selectorContainer: {
-      paddingBottom: 15,
-    },
-  });
 
   return (
     <View style={styles.container}>
@@ -123,9 +89,12 @@ const EditExercise = ({ navigation, route }) => {
           data={["0.25", "0.5", "1", "1.25", "2.5", "5"]}
         />
       </View>
-      <View style={styles.buttonsContainer}>
-        <Button onPress={handleSaveExercise} title="save" />
-      </View>
+      <StandarIconButton
+        icon={icons.done}
+        text="Done"
+        buttonProperties={{backgroundColor: colors.foreground.secondary}}
+        onPress={handleSaveExercise}
+      />
     </View>
   );
 };

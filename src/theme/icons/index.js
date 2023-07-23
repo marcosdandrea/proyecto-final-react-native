@@ -8,5 +8,7 @@ export const icons = {
     delete: require("./delete.png"),
     edit: require("./edit.png"),
     search: require("./search.png"),
-    clear: require("./clear.png")
+    clear: require("./clear.png"),
+    done: require("./done.png"),
+    back: require("./back.png")
 }
