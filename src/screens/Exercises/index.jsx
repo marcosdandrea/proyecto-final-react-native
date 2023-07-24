@@ -1,17 +1,24 @@
 import {
   View,
-  FlatList
+  FlatList,
+  Dimensions,
+  Image,
+  Alert
 } from "react-native";
 import InputTextLabeled from "../../components/InputTextLabeled";
 import colors from "../../theme/colors";
 import { useState, useEffect } from "react";
-import {Filters} from "../../components"
-import ExerciseItem from "../../components/ExerciseItem";
-import { useSelector } from "react-redux";
+import {ExerciseItem, Filters} from "../../components"
+import PullToAction from "../../components/PullToAction";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles";
+import { icons } from "../../theme/icons";
+import { removeExercise } from "../../store/exercises/exercises.slice";
 
 
 const Exercises = ({ navigation }) => {
+  const dispatch = useDispatch()
+  const screenWidth = Dimensions.get("window").width;
   const _exercises = useSelector((state)=> state.exercises.items)
   const categories = useSelector((state)=> state.exercises.categories)
   const [exercises, setExercises] = useState()
@@ -42,7 +49,6 @@ const Exercises = ({ navigation }) => {
   }
 
   const runFilterByCategory = (exercisesToFilter) => {
-    console.log (exercisesToFilter)
       return exercisesToFilter.filter(ex => ex.category.key == filterByCategory)
   }
 
@@ -53,6 +59,28 @@ const Exercises = ({ navigation }) => {
       return (exerciseName.indexOf(filter)>-1)
     })
   }
+
+  const handleOnDeleteExercise = ({exercise}) => {
+
+    Alert.alert(
+      "Delete exercise",
+      "Are you shure about to delete this exercise",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+          },
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            dispatch(removeExercise(exercise));
+          },
+        },
+      ]
+    );
+  };
 
 
   return (
@@ -74,11 +102,33 @@ const Exercises = ({ navigation }) => {
         contentContainerStyle={styles.exerciseListContainer}
         data={filteredExercises}
         renderItem={({ item }) => (
-          <ExerciseItem item={item} navigation={navigation} />
+          <PullToAction 
+            onRightPull={()=>{handleOnDeleteExercise ({exercise: item})}}
+            onLeftPull={()=>{navigation.navigate("Edit Exercise", {exercise: item})}}
+            vibrate={true}
+            LeftComponent={DeleteComponent}
+            RightComponent={EditComponent}
+            sideComponentsWidth={50}
+            MainComponent={()=>ExerciseItem({item, width: screenWidth * 0.93})}
+            mainComponentWidth={screenWidth * 0.93}/>
         )}
       />
     </View>
   );
+};
+
+
+
+const DeleteComponent = () => {
+  return <View style={styles.deleteComponent}>
+    <Image source={icons.delete} style={styles.icon}/>
+  </View>;
+};
+
+const EditComponent = () => {
+  return <View style={styles.editComponent}>
+    <Image source={icons.edit} style={styles.icon}/>
+  </View>;
 };
 
 export default Exercises;

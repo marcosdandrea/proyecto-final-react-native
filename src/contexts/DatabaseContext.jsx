@@ -9,10 +9,6 @@ const DatabaseContextProvider = ({ children }) => {
     const [routines, setRoutines] = useState([])
 
     useEffect(()=>{
-/*         console.log ("Exercises has been updated")
-        const allExercises = Object.keys(database.exercises).map(key => {return {...database.exercises[key], key}})
-        setExercises(allExercises) */
-
         const allCategories = Object.keys(database.exercises).map(key => database.exercises[key].category)
         const categorySet = Array.from(new Set(allCategories))
         setCategories(categorySet)

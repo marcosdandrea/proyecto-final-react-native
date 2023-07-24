@@ -15,8 +15,8 @@ const MainButtonTab = ({ focused, size, tabBarColor }) => {
         style={{
           position: "absolute",
           zIndex: 2,
-          width: size - 35,
-          height: size - 35,
+          width: size - 30,
+          height: size - 30,
           tintColor: focused
             ? colors.foreground.white
             : colors.foreground.black,

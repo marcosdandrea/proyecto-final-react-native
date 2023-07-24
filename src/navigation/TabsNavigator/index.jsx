@@ -74,7 +74,7 @@ const TabsNavigator = () => {
               tabBarIcon: ({ focused }) => (
                 <MainButtonTab
                   focused={focused}
-                  size={70}
+                  size={60}
                   tabBarColor={colors.background.secondary}
                 />
               ),

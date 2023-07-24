@@ -1,113 +1,242 @@
-[
-    {
-        "amount": [
-            60,
-            65,
-            70
-        ],
-        "name": "Sentadilla con barra",
-        "rest": [
-            60,
-            60,
-            60
-        ],
-        "sets": [
-            12,
-            10,
-            8
-        ]
+{
+    "categories": {
+        "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db": {
+            "color": "pureRed",
+            "name": "Piernas"
+        },
+        "b1c0241e-9db5-4c93-af5e-48d46e36c3f9": {
+            "color": "electricViolet",
+            "name": "Pecho"
+        },
+        "ddb24b18-b64c-4f5e-867f-1d6f2e076574": {
+            "color": "byzantineBlue",
+            "name": "Brazos"
+        },
+        "e59333e9-8564-4e3b-a688-65050e7b50e3": {
+            "color": "forestGreen",
+            "name": "Cardio"
+        },
+        "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a": {
+            "color": "emerald",
+            "name": "Espalda"
+        }
     },
-    {
-        "amount": [
-            20,
-            22.5,
-            25
-        ],
-        "name": "Press militar",
-        "rest": [
-            60,
-            60,
-            60
-        ],
-        "sets": [
-            15,
-            12,
-            10
-        ]
-    },
-    {
-        "amount": [
-            50,
-            50,
-            55
-        ],
-        "name": "Curl de piernas en máquina",
-        "rest": [
-            60,
-            60,
-            60
-        ],
-        "sets": [
-            15,
-            15,
-            12
-        ]
-    },
-    {
-        "amount": [
-            0,
-            0,
-            0
-        ],
-        "name": "Abdominales",
-        "rest": [
-            30,
-            30,
-            30
-        ],
-        "sets": [
-            20,
-            20,
-            20
-        ]
-    },
-    {
-        "amount": [
-            80,
-            85,
-            90
-        ],
-        "name": "Prensa de piernas",
-        "rest": [
-            60,
-            60,
-            60
-        ],
-        "sets": [
-            12,
-            10,
-            8
-        ]
-    },
-    {
-        "amount": [
-            20,
-            22.5,
-            25,
-            30
-        ],
-        "name": "Press de hombros con barra",
-        "rest": [
-            60,
-            60,
-            60,
-            60
-        ],
-        "sets": [
-            12,
-            10,
-            10,
-            8
-        ]
+    "items": {
+        "08b1a8fb-c3b5-4bc5-b3f2-79a1ccf20cb5": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Realizar curl de bíceps con cable en posición de pie",
+            "increment": 1.25,
+            "name": "Curl de bíceps con cable",
+            "unit": "kg"
+        },
+        "0b361cf9-dc05-4b04-8c0c-24c400c9c8a2": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Realizar una flexión de pecho, saltar y repetir",
+            "increment": 1,
+            "name": "Burpees",
+            "unit": "repeticiones"
+        },
+        "1389a4ab-6e12-4397-a73d-b9797f2e7d80": {
+            "category": "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a",
+            "description": "Levantar pesas desde el suelo con las piernas abiertas",
+            "increment": 5,
+            "name": "Peso muerto sumo",
+            "unit": "kg"
+        },
+        "1e3b2e14-7e6f-4d60-9e9a-63e7f8e3f6db": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Realizada en posición de pie, con barra en los hombros",
+            "increment": 5,
+            "name": "Sentadilla con barra",
+            "unit": "kg"
+        },
+        "2049f37a-e7de-4c8d-96ab-6dd8c1fb96af": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Bajar y subir el cuerpo sostenido de barras paralelas",
+            "increment": 1.25,
+            "name": "Fondos de tríceps en paralelas",
+            "unit": "repeticiones"
+        },
+        "2c5d031d-88d1-4167-8a13-295041c3094b": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Llevar las rodillas hacia el pecho alternativamente en posición de plancha",
+            "increment": 1,
+            "name": "Mountain climbers",
+            "unit": "repeticiones"
+        },
+        "2e8baf57-d1dd-4a98-93d6-ccda37837839": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Realizar sentadillas con salto sosteniendo pesas",
+            "increment": 1,
+            "name": "Sentadilla con salto y peso",
+            "unit": "repeticiones"
+        },
+        "2efccdc9-0e23-4a13-b650-800f7bc9f9f3": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Realizar flexiones con las manos juntas formando un diamante",
+            "increment": 1,
+            "name": "Flexiones en diamante",
+            "unit": "repeticiones"
+        },
+        "44e94452-0ebc-4529-bb0d-cc8790d135ac": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Bajar y subir el cuerpo sostenido de barras paralelas",
+            "increment": 1,
+            "name": "Fondos de tríceps",
+            "unit": "repeticiones"
+        },
+        "49161ec1-5cda-4187-a9a1-418f6dca6c64": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Realizar sentadillas y saltar al subir",
+            "increment": 1,
+            "name": "Sentadilla con salto",
+            "unit": "repeticiones"
+        },
+        "58cbb3f3-aa46-47f9-b1aa-2c79924cf03c": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Realizar flexiones sosteniendo el cuerpo con una sola mano",
+            "increment": 1,
+            "name": "Flexiones con una mano",
+            "unit": "repeticiones"
+        },
+        "5b42b67c-e8f3-4422-9da7-5a832708bb0d": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Realizar curl de bíceps con mancuernas en posición neutra",
+            "increment": 1.25,
+            "name": "Curl de martillo",
+            "unit": "kg"
+        },
+        "5bfb68b9-72f8-4d97-b3b9-9e04bc1c3674": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Realizar sentadillas con las piernas abiertas",
+            "increment": 1.25,
+            "name": "Sentadilla sumo",
+            "unit": "repeticiones"
+        },
+        "5c8c05e2-2146-4d0a-bd1f-0e85661e4b0e": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Levantar mancuernas hacia el pecho en posición inclinada",
+            "increment": 1.25,
+            "name": "Remo con mancuernas",
+            "unit": "kg"
+        },
+        "703489b9-3dc2-42ce-9990-b4cfa0a1b47c": {
+            "category": "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a",
+            "description": "Levantar pesas sobre la cabeza en posición de pie",
+            "increment": 5,
+            "name": "Press militar",
+            "unit": "kg"
+        },
+        "721b41c3-1ca7-49f0-b9f6-692f64a25a79": {
+            "category": "b1c0241e-9db5-4c93-af5e-48d46e36c3f9",
+            "description": "Levantar pesas acostado en un banco declinado",
+            "increment": 5,
+            "name": "Press de banca declinado",
+            "unit": "kg"
+        },
+        "78b34107-8d6a-4d9e-81b1-e7cf4de24157": {
+            "category": "b1c0241e-9db5-4c93-af5e-48d46e36c3f9",
+            "description": "Sostener el cuerpo en posición de tabla",
+            "increment": 5,
+            "name": "Plancha",
+            "unit": "segundos"
+        },
+        "7b187eab-b103-4be3-912e-3629a1466d15": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Levantar una barra hacia el pecho en posición inclinada",
+            "increment": 1.25,
+            "name": "Remo con barra",
+            "unit": "kg"
+        },
+        "7e190a1e-78d9-44b3-87d2-1af37f8b09bf": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Bajar y subir el cuerpo sostenido de anillas",
+            "increment": 1,
+            "name": "Fondos de pecho en anillas",
+            "unit": "repeticiones"
+        },
+        "886b546a-19ca-486b-a4c8-50fc7cf76be3": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Saltar sobre una cuerda girando por debajo de los pies",
+            "increment": 1,
+            "name": "Salto con cuerda",
+            "unit": "repeticiones"
+        },
+        "96d45384-61d7-4d9c-9f2f-4b3525aaab3d": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Avanzar con una pierna y luego la otra en posición de pie",
+            "increment": 1,
+            "name": "Zancadas",
+            "unit": "repeticiones"
+        },
+        "981eabf1-cc59-42f8-9f66-6c8a383b5f7b": {
+            "category": "e59333e9-8564-4e3b-a688-65050e7b50e3",
+            "description": "Realizar flexiones y aplaudir en el aire entre cada repetición",
+            "increment": 1,
+            "name": "Flexiones con palmada",
+            "unit": "repeticiones"
+        },
+        "9a7d001f-d400-4f2f-afaa-62ce2be8f2b2": {
+            "category": "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a",
+            "description": "Levantar pesas desde el suelo en posición de pie",
+            "increment": 5,
+            "name": "Peso muerto",
+            "unit": "kg"
+        },
+        "9c2a7a57-9eb9-4d02-b670-4ec89a1cc72e": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Realizar sentadillas con una pierna estirada hacia atrás",
+            "increment": 1,
+            "name": "Sentadilla búlgara",
+            "unit": "repeticiones"
+        },
+        "a58c0e5b-45c2-4d1a-b880-d14c7dd1d9ca": {
+            "category": "b1c0241e-9db5-4c93-af5e-48d46e36c3f9",
+            "description": "Levantar pesas acostado en un banco inclinado",
+            "increment": 5,
+            "name": "Press de banca inclinado",
+            "unit": "kg"
+        },
+        "a7a276b5-938b-4606-9203-49e69b6f488a": {
+            "category": "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a",
+            "description": "Levantar pesas sobre la cabeza en posición sentada",
+            "increment": 5,
+            "name": "Prensa de hombros",
+            "unit": "kg"
+        },
+        "acab07bb-cc63-4b85-94e8-8a8b3a52d1e7": {
+            "category": "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a",
+            "description": "Realizar flexiones con las manos juntas formando un diamante",
+            "increment": 1,
+            "name": "Flexiones diamante",
+            "unit": "repeticiones"
+        },
+        "ae3ac3b2-27e4-4dd4-b9b2-8a4b164bcf81": {
+            "category": "b1c0241e-9db5-4c93-af5e-48d46e36c3f9",
+            "description": "Levantar pesas acostado en un banco",
+            "increment": 5,
+            "name": "Press de banca",
+            "unit": "kg"
+        },
+        "e4c3c9ab-6e4e-4b8d-b87c-72aaeb464d05": {
+            "category": "f823e4e7-1cd8-4290-9d15-4e3c2a3e260a",
+            "description": "Levantar pesas desde el suelo manteniendo piernas extendidas",
+            "increment": 5,
+            "name": "Peso muerto rumano",
+            "unit": "kg"
+        },
+        "f0e5f667-1a97-4d46-9785-d95af22e3fbf": {
+            "category": "1e3b2e14-7e6f-4d60-9e9a-63e7afe3f6db",
+            "description": "Avanzar con una pierna y luego la otra lateralmente",
+            "increment": 1.25,
+            "name": "Zancadas laterales",
+            "unit": "repeticiones"
+        },
+        "fc329893-755b-4a8a-893d-8d15dbcd41d9": {
+            "category": "ddb24b18-b64c-4f5e-867f-1d6f2e076574",
+            "description": "Levantar el cuerpo sujetándose de una barra",
+            "increment": 1,
+            "name": "Dominadas",
+            "unit": "repeticiones"
+        }
     }
-]

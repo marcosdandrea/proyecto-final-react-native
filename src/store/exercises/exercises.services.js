@@ -1,6 +1,7 @@
 const removeExerciseService = (state, action) => {
+
     let key = action.payload.key
-    delete state[key]
+    delete state.items[key]
 }
 
 const saveExerciseService = (state, action) => {

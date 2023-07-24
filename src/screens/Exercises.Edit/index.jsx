@@ -17,14 +17,20 @@ const EditExercise = ({ navigation, route }) => {
   const [categories, setCategories] = useState([])
 
   const [exerciseName, setExerciseName] = useState(exercise.name);
-  const [exerciseCategory, setExerciseCategory] = useState(exercise.category.name);
+  const [exerciseCategory, setExerciseCategory] = useState();
   const [exerciseDescription, setExerciseDescription] = useState(exercise.description);
   const [exerciseUnit, setExerciseUnit] = useState(exercise.unit);
   const [exerciseIncrement, setExerciseIncrement] = useState(exercise.increment);
 
   useEffect(()=>{
-    const newCategories = Object.keys()
+    const newCategories = Object.keys(_categories).map(key=> {return({..._categories[key], key})})
+    setCategories(newCategories)
   }, [_categories])
+
+  useEffect(()=>{
+    setExerciseCategory(categories.find(category => category.key == exercise.category.key))
+  }, [exercise, categories])
+
 
   const handleSaveExercise = () => {
     const data = {
@@ -50,12 +56,16 @@ const EditExercise = ({ navigation, route }) => {
       <View style={styles.selectorContainer}>
         <Text style={styles.label}>Select a category</Text>
         <SelectDropdown
-          onSelect={setExerciseCategory}
+          onSelect={(selectedItem)=>setExerciseCategory(selectedItem.key)}
+          buttonTextAfterSelection={(selectedItem)=>selectedItem.name}
           buttonStyle={styles.dropdown.button}
           buttonTextStyle={styles.dropdown.text}
           dropdownStyle={styles.dropdown.list}
           rowTextStyle={styles.dropdown.text}
           defaultValue={exerciseCategory}
+          search
+          searchPlaceHolder={'Search here'}
+          rowTextForSelection={(item)=>item.name}
           data={categories}
         />
       </View>

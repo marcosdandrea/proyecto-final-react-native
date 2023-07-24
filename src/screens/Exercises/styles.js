@@ -17,7 +17,32 @@ const styles = StyleSheet.create({
       paddingHorizontal: 15,
       paddingTop: 15,
       paddingBottom: 5
-    }
+    },
+    deleteComponent:{
+      backgroundColor: colors.foreground.error,
+      padding: 5,
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 75,
+      width: 50,
+      position: "relative"
+    },
+    editComponent:{
+      backgroundColor: colors.foreground.warning,
+      padding: 5,
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 75,
+      width: 50,
+      position: "relative"
+    },
+    icon:{
+      height: 25,
+      width: 25,
+      margin: 20
+    },
   });
 
   export default styles
