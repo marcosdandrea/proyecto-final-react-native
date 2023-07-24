@@ -241,28 +241,27 @@ export default database = {
           color: "emerald"
         }
       }
-  }
-  ,
+  },
   routines: {
     "40d043e7-cfd1-452e-8dcd-sfc94415af42": {
       name: "Pecho y Brazos",
       exercises: {
-        "39b0101c-3c57-40b1-8687-926d0918dabb": {
+        "44e94452-0ebc-4529-bb0d-cc8790d135ac": {
           sets: [15, 12, 12, 10],
           rest: [60, 60, 60, 60],
           amount: [40, 42.5, 45, 50],
         },
-        "28d08963-378e-4be0-8e57-876c48ed4091": {
+        "0b361cf9-dc05-4b04-8c0c-24c400c9c8a2": {
           sets: [15, 12, 10, 8],
           rest: [60, 60, 60, 60],
           amount: [40, 40, 40, 40],
         },
-        "34e097a8-6c4d-41e7-b32b-c72e7fb6ce77": {
+        "2e8baf57-d1dd-4a98-93d6-ccda37837839": {
           sets: [12, 10, 10, 8],
           rest: [60, 60, 60, 60],
           amount: [20, 22.5, 25, 30],
         },
-        "32b09d52-afcc-4f82-a315-5c865d8f9d6f": {
+        "58cbb3f3-aa46-47f9-b1aa-2c79924cf03c": {
           sets: [12, 10, 10, 8],
           rest: [30, 30, 30, 30],
           amount: [20, 22.5, 25, 30],
@@ -271,29 +270,29 @@ export default database = {
     },
   },
   workouts: {
-    "32b0sd52-afcc-4f82-a315-5c865d8f9d6f": {
+    "40d043e7-cfd1-452e-8dcd-sfc94415af42": {
       date: "9 jul 2023 08:45",
       duration: 5400000,
       execution: {
-        "39b0101c-3c57-40b1-8687-926d0918dabb": {
+        "44e94452-0ebc-4529-bb0d-cc8790d135ac": {
           0: { reps: 15, amount: 40 },
           1: { reps: 12, amount: 42.5 },
           2: { reps: 12, amount: 45 },
           3: { reps: 10, amount: 50 },
         },
-        "28d08963-378e-4be0-8e57-876c48ed4091": {
+        "0b361cf9-dc05-4b04-8c0c-24c400c9c8a2": {
           0: { reps: 15, amount: 40 },
           1: { reps: 12, amount: 40 },
           2: { reps: 10, amount: 40 },
           3: { reps: 8, amount: 40 },
         },
-        "34e097a8-6c4d-41e7-b32b-c72e7fb6ce77": {
+        "2e8baf57-d1dd-4a98-93d6-ccda37837839": {
           0: { reps: 12, amount: 20 },
           1: { reps: 10, amount: 22.5 },
           2: { reps: 10, amount: 25 },
           3: { reps: 8, amount: 30 },
         },
-        "32b09d52-afcc-4f82-a315-5c865d8f9d6f": {
+        "58cbb3f3-aa46-47f9-b1aa-2c79924cf03c": {
           0: { reps: 12, amount: 20 },
           1: { reps: 10, amount: 22.5 },
           2: { reps: 10, amount: 25 },

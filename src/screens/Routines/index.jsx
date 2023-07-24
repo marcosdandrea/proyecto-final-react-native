@@ -1,7 +1,6 @@
-import { View, FlatList, Dimensions, Text } from "react-native";
+import { View, FlatList, Dimensions } from "react-native";
 import colors from "../../theme/colors";
-import { useContext, useEffect, useRef, useState } from "react";
-import DatabaseContext from "../../contexts/DatabaseContext";
+import { useEffect, useRef, useState } from "react";
 import { icons } from "../../theme/icons";
 import {
   InputTextLabeled,
@@ -11,9 +10,11 @@ import {
 } from "../../components";
 import RoutineViewList from "../../components/RoutineViewList";
 import styles from "./styles";
+import { useSelector } from "react-redux";
 
 const Routines = ({ navigation }) => {
-  const { routines } = useContext(DatabaseContext);
+  const _routines = useSelector((state)=> state.routines)
+  const [routines, setRoutines] = useState(Object.keys(_routines).map(key=> {return({..._routines[key],key})}))
   const [routineList, setRoutineList] = useState([]);
   const [filterError, setFilterError] = useState();
   const [filterRoutinesByText, setFilterRoutinesByText] = useState("");
@@ -104,7 +105,7 @@ const Routines = ({ navigation }) => {
       <View style={styles.routineContainer}>
         <View style={styles.routines}>
           <RoutineViewList
-            exercisesData={currentRoutineData.exercises}
+            currentRoutine={currentRoutineData.exercises}
             navigation={navigation}
           />
         </View>

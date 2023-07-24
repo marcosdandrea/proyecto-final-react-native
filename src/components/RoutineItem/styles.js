@@ -10,8 +10,13 @@ export default styles = StyleSheet.create({
       borderRadius: 5,
       marginRight: 15,
       padding: 10,
-      flexDirection: "column",
+      flexDirection: "row",
       justifyContent: "center",
+      alignItems: "center"
+    },
+    mainContainer:{
+      flex: 1,
+      flexDirection: "column"
     },
     nameContainer: {
       flexDirection: "row",
