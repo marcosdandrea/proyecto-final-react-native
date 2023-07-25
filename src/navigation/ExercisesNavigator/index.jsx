@@ -45,13 +45,22 @@ function ExercisesNavigator() {
             <Header title={route.name}>
               <AddButton
                 onPress={() =>
-                  navigation.navigate("Edit Exercise", { exercise: {} })
+                  navigation.navigate("Create Exercise", { exercise: {} })
                 }
               />
             </Header>
           ),
         })}
         component={ExerciseView}
+      />
+
+      <Stack.Screen
+        name="Create Exercise"
+        options={({ navigation, route }) => ({
+          presentation: "modal",
+          headerLeft: () => BackButton({ navigation, route }),
+        })}
+        component={EditExercise}
       />
 
       <Stack.Screen
