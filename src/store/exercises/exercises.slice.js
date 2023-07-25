@@ -13,6 +13,7 @@ const exercisesSlice = createSlice({
   name: "exercises",
   initialState,
   reducers: {
+    addExercise: addExerciseService,
     removeExercise: removeExerciseService,
     saveExercise: saveExerciseService,
   },

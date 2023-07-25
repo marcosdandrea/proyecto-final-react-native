@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { InputTextLabeled, StandarIconButton } from "../../components";
 import colors from "../../theme/colors";
 import { styles } from "./styles";
-import { saveExercise } from "../../store/exercises/exercises.slice";
-import uuid from "react-native-uuid";
+import {
+  addExercise,
+  saveExercise,
+} from "../../store/exercises/exercises.slice";
 import { icons } from "../../theme/icons";
 
 const EditExercise = ({ navigation, route }) => {
@@ -14,23 +16,35 @@ const EditExercise = ({ navigation, route }) => {
 
   const { exercise } = route.params || { exercise: undefined };
   const _categories = useSelector((state) => state.exercises.categories);
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([]);
 
   const [exerciseName, setExerciseName] = useState(exercise.name);
   const [exerciseCategory, setExerciseCategory] = useState();
-  const [exerciseDescription, setExerciseDescription] = useState(exercise.description);
+  const [exerciseDescription, setExerciseDescription] = useState(
+    exercise.description
+  );
   const [exerciseUnit, setExerciseUnit] = useState(exercise.unit);
-  const [exerciseIncrement, setExerciseIncrement] = useState(exercise.increment);
+  const [exerciseIncrement, setExerciseIncrement] = useState(
+    exercise.increment
+  );
 
-  useEffect(()=>{
-    const newCategories = Object.keys(_categories).map(key=> {return({..._categories[key], key})})
-    setCategories(newCategories)
-  }, [_categories])
+  useEffect(() => {
+    const newCategories = Object.keys(_categories).map((key) => {
+      return { ..._categories[key], key };
+    });
+    setCategories(newCategories);
+  }, [_categories]);
 
-  useEffect(()=>{
-    setExerciseCategory(categories.find(category => category.key == exercise.category.key))
-  }, [exercise, categories])
-
+  useEffect(() => {
+    if (
+      Object.keys(categories).length == 0 ||
+      Object.keys(exercise).length == 0
+    )
+      return;
+    setExerciseCategory(
+      categories.find((category) => category.key == exercise.category.key)
+    );
+  }, [exercise, categories]);
 
   const handleSaveExercise = () => {
     const data = {
@@ -39,9 +53,11 @@ const EditExercise = ({ navigation, route }) => {
       category: exerciseCategory,
       unit: exerciseUnit,
       increment: exerciseIncrement,
-      key: exercise.key || uuid.v4(),
+      key: exercise.key || 0,
     };
-    dispatch(saveExercise(data));
+    exercise.key 
+      ? dispatch(saveExercise(data)) 
+      : dispatch(addExercise(data))
     navigation.goBack();
   };
 
@@ -56,16 +72,16 @@ const EditExercise = ({ navigation, route }) => {
       <View style={styles.selectorContainer}>
         <Text style={styles.label}>Select a category</Text>
         <SelectDropdown
-          onSelect={(selectedItem)=>setExerciseCategory(selectedItem.key)}
-          buttonTextAfterSelection={(selectedItem)=>selectedItem.name}
+          onSelect={(selectedItem) => setExerciseCategory(selectedItem.key)}
+          buttonTextAfterSelection={(selectedItem) => selectedItem.name}
           buttonStyle={styles.dropdown.button}
           buttonTextStyle={styles.dropdown.text}
           dropdownStyle={styles.dropdown.list}
           rowTextStyle={styles.dropdown.text}
           defaultValue={exerciseCategory}
           search
-          searchPlaceHolder={'Search here'}
-          rowTextForSelection={(item)=>item.name}
+          searchPlaceHolder={"Search here"}
+          rowTextForSelection={(item) => item.name}
           data={categories}
         />
       </View>
@@ -102,7 +118,7 @@ const EditExercise = ({ navigation, route }) => {
       <StandarIconButton
         icon={icons.done}
         text="Done"
-        buttonProperties={{backgroundColor: colors.foreground.secondary}}
+        buttonProperties={{ backgroundColor: colors.foreground.secondary }}
         onPress={handleSaveExercise}
       />
     </View>
