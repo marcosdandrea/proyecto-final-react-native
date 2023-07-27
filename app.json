@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "proyecto-final",
-    "slug": "eas init --id b359b71f-b857-42ad-b53b-4e33f2f54156",
+    "slug": "proyecto-final",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
