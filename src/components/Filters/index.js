@@ -38,6 +38,7 @@ const Filters = ({ filterList, onPress, selected }) => {
     const [categories, setCategories] = useState([])
 
     useEffect(()=>{
+      if(Object.keys(filterList).length == 0) return
         const newCategories = Object.keys(filterList).map((key)=> {return {...filterList[key], key}})
         setCategories(newCategories)
     }, [filterList])

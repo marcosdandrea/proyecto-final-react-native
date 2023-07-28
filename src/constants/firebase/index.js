@@ -1,0 +1,1 @@
+export const URL_BASE_FIREBASE_REALTIME_DATABASE ="https://fitapp-7bb40-default-rtdb.firebaseio.com"

@@ -3,25 +3,44 @@ import {
   FlatList,
   Dimensions,
   Image,
-  Alert
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import InputTextLabeled from "../../components/InputTextLabeled";
 import colors from "../../theme/colors";
 import { useState, useEffect } from "react";
-import {ExerciseItem, Filters} from "../../components"
+import { ExerciseItem, Filters } from "../../components";
 import PullToAction from "../../components/PullToAction";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "./styles";
 import { icons } from "../../theme/icons";
 import { removeExercise } from "../../store/exercises/exercises.slice";
-
+import {
+  useGetCategoriesQuery,
+  useGetExercisesQuery,
+  useRemoveExerciseMutation,
+} from "../../store/exercises/exercises.API";
 
 const Exercises = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const {
+    data: exerciseData,
+    error: exerciseError,
+    isLoading: exerciseIsLoading,
+  } = useGetExercisesQuery();
+  const {
+    data: categoryData,
+    error: categoryError,
+    isLoading: categoryIsLoading,
+  } = useGetCategoriesQuery();
+
+  const [deleteExercise, { error: deleteExerciseError }] =
+    useRemoveExerciseMutation();
+  //const exerciseData = useSelector((state)=> state.exercises.items)
+  //const categoryData = useSelector((state)=> state.exercises.categories)
+
   const screenWidth = Dimensions.get("window").width;
-  const _exercises = useSelector((state)=> state.exercises.items)
-  const categories = useSelector((state)=> state.exercises.categories)
-  const [exercises, setExercises] = useState()
+  const [exercises, setExercises] = useState();
 
   //filters
   const [filterByName, setFilterByName] = useState("");
@@ -29,106 +48,145 @@ const Exercises = ({ navigation }) => {
   //filtered Exercises
   const [filteredExercises, setFilteredExercises] = useState([]);
 
-  useEffect(()=>{
-    const allExercises = Object.keys(_exercises).map(key => {
-      const category = {category: {...categories[_exercises[key].category], key: _exercises[key].category}}
-      const exercise = {..._exercises[key], ...category, key}
-      return exercise
-    })
-    setExercises(allExercises)
-  }, [_exercises])
+  useEffect(() => {
+    if (exerciseIsLoading) return;
+    const allExercises = Object.keys(exerciseData).map((key) => {
+      const category = {
+        category: {
+          ...categoryData[exerciseData[key].category],
+          key: exerciseData[key].category,
+        },
+      };
+      const exercise = { ...exerciseData[key], ...category, key };
+      return exercise;
+    });
+    setExercises(allExercises);
+  }, [exerciseData]);
 
-  useEffect(()=> setFilteredExercises(runAllFilters(exercises)), [exercises, filterByName, filterByCategory])
+  useEffect(
+    () => setFilteredExercises(runAllFilters(exercises)),
+    [exercises, filterByName, filterByCategory]
+  );
 
   const runAllFilters = (exercisesToFilter) => {
-    if (!exercises) return
-    let exercisesFiltered = [...exercisesToFilter]
-    if (filterByCategory!="") exercisesFiltered = runFilterByCategory(exercisesFiltered)
-    if (filterByName != "") exercisesFiltered = runFilterByName(exercisesFiltered)
-    return (exercisesFiltered)
-  }
+    if (!exercises) return;
+    let exercisesFiltered = [...exercisesToFilter];
+    if (filterByCategory != "")
+      exercisesFiltered = runFilterByCategory(exercisesFiltered);
+    if (filterByName != "")
+      exercisesFiltered = runFilterByName(exercisesFiltered);
+    return exercisesFiltered;
+  };
 
   const runFilterByCategory = (exercisesToFilter) => {
-      return exercisesToFilter.filter(ex => ex.category.key == filterByCategory)
-  }
+    return exercisesToFilter.filter(
+      (ex) => ex.category.key == filterByCategory
+    );
+  };
 
   const runFilterByName = (exercisesToFilter) => {
-    return [...exercisesToFilter].filter(ex => {
-      const exerciseName = ex.name.toLowerCase()
-      const filter = filterByName.toLowerCase()
-      return (exerciseName.indexOf(filter)>-1)
-    })
-  }
+    return [...exercisesToFilter].filter((ex) => {
+      const exerciseName = ex.name.toLowerCase();
+      const filter = filterByName.toLowerCase();
+      return exerciseName.indexOf(filter) > -1;
+    });
+  };
 
-  const handleOnDeleteExercise = ({exercise}) => {
-
+  const handleOnDeleteExercise = async ({ exercise }) => {
     Alert.alert(
-      "Delete exercise",
-      "Are you shure about to delete this exercise",
+      "Deleting exercise",
+      `Are you shure about to delete the exercise: "${exercise.name}"?`,
       [
         {
           text: "Cancel",
-          onPress: () => {
-          },
+          onPress: () => {},
           style: "cancel",
         },
         {
           text: "OK",
           onPress: () => {
-            dispatch(removeExercise(exercise));
+            try {
+              console.log(exercise.key);
+              deleteExercise({key: exercise.key});
+              //dispatch(removeExercise(exercise));
+            } catch (e) {
+              console.warn(e);
+            }
           },
         },
       ]
     );
   };
 
-
   return (
     <View style={styles.container}>
-      <Filters
-        selected={filterByCategory}
-        onPress={(selected) => setFilterByCategory(selected)}
-        filterList={categories}
-      />
-      <View style={styles.inputFilterContainer}>
-        <InputTextLabeled
-          onChangeText={(text) => setFilterByName(text)}
-          containerBackgroundColor={colors.background.primary}
-          label="Nombre del ejercicio"
-        />
-      </View>
-      <FlatList
-        style={styles.exerciseList}
-        contentContainerStyle={styles.exerciseListContainer}
-        data={filteredExercises}
-        renderItem={({ item }) => (
-          <PullToAction 
-            onRightPull={()=>{handleOnDeleteExercise ({exercise: item})}}
-            onLeftPull={()=>{navigation.navigate("Edit Exercise", {exercise: item})}}
-            vibrate={true}
-            LeftComponent={DeleteComponent}
-            RightComponent={EditComponent}
-            sideComponentsWidth={50}
-            MainComponent={()=>ExerciseItem({item, width: screenWidth * 0.93})}
-            mainComponentWidth={screenWidth * 0.93}/>
-        )}
-      />
+      {exerciseIsLoading && categoryIsLoading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator
+            color={colors.foreground.secondary}
+            size={"large"}
+          />
+        </View>
+      ) : (
+        <View>
+          <Filters
+            selected={filterByCategory}
+            onPress={(selected) => setFilterByCategory(selected)}
+            filterList={categoryData}
+          />
+          <View style={styles.inputFilterContainer}>
+            <InputTextLabeled
+              onChangeText={(text) => setFilterByName(text)}
+              containerBackgroundColor={colors.background.primary}
+              label="Nombre del ejercicio"
+            />
+          </View>
+
+          <FlatList
+            style={styles.exerciseList}
+            contentContainerStyle={styles.exerciseListContainer}
+            data={filteredExercises}
+            renderItem={({ item }) => (
+              <PullToAction
+                onRightPull={() => {
+                  handleOnDeleteExercise({ exercise: item });
+                }}
+                onLeftPull={() => {
+                  navigation.navigate("Edit Exercise", { exercise: item });
+                }}
+                vibrate={true}
+                LeftComponent={DeleteComponent}
+                RightComponent={EditComponent}
+                sideComponentsWidth={50}
+                MainComponent={() =>
+                  ExerciseItem({ item, width: screenWidth * 0.93 })
+                }
+                mainComponentWidth={screenWidth * 0.93}
+              />
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 };
 
-
-
 const DeleteComponent = () => {
-  return <View style={styles.deleteComponent}>
-    <Image source={icons.delete} style={styles.icon}/>
-  </View>;
+  return (
+    <View style={styles.deleteComponent}>
+      <Image source={icons.delete} style={styles.icon} />
+    </View>
+  );
 };
 
 const EditComponent = () => {
-  return <View style={styles.editComponent}>
-    <Image source={icons.edit} style={styles.icon}/>
-  </View>;
+  return (
+    <View style={styles.editComponent}>
+      <Image source={icons.edit} style={styles.icon} />
+    </View>
+  );
 };
 
 export default Exercises;

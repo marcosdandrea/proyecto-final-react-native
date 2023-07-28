@@ -1,0 +1,16 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { URL_BASE_FIREBASE_REALTIME_DATABASE } from "../../constants/firebase"
+
+export const routinesAPI = createApi({
+    reducerPath: "routinesAPI",
+    baseQuery: fetchBaseQuery({
+        baseUrl: URL_BASE_FIREBASE_REALTIME_DATABASE,
+    }),
+    endpoints: (builder) => ({
+        getRoutines: builder.query({
+            query: () => "/routines.json"
+        }),
+    })
+})
+
+export const { useGetRoutinesQuery } = routinesAPI

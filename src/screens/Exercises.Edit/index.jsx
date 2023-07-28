@@ -10,12 +10,28 @@ import {
   saveExercise,
 } from "../../store/exercises/exercises.slice";
 import { icons } from "../../theme/icons";
+import {
+  useAddNewExercisesMutation,
+  useGetCategoriesQuery,
+  useSaveExercisesMutation,
+} from "../../store/exercises/exercises.API";
 
 const EditExercise = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const { exercise } = route.params || { exercise: undefined };
-  const _categories = useSelector((state) => state.exercises.categories);
+  const { data: _categories, isLoading: loadingCategories } =
+    useGetCategoriesQuery();
+  const [
+    createExercise,
+    { data: creatingExerciseData, isLoading: isLoadingAddNewExercise },
+  ] = useAddNewExercisesMutation();
+  const [
+    saveExercise,
+    { data: savingExerciseData, isLoading: isLoadingSaveExercise },
+  ] = useSaveExercisesMutation();
+
+  //const _categories = useSelector((state) => state.exercises.categories);
   const [categories, setCategories] = useState([]);
 
   const [exerciseName, setExerciseName] = useState(exercise.name);
@@ -46,19 +62,30 @@ const EditExercise = ({ navigation, route }) => {
     );
   }, [exercise, categories]);
 
-  const handleSaveExercise = () => {
+  const handleSaveExercise = async () => {
     const data = {
       name: exerciseName,
       description: exerciseDescription,
       category: exerciseCategory,
       unit: exerciseUnit,
       increment: exerciseIncrement,
-      key: exercise.key || 0,
+      //key: exercise.key || 0,
     };
+    try {
+      exercise.key
+        ? await saveExercise({ data, key: exercise.key })
+        : await createExercise({ data });
+        navigation.goBack();
+    } catch (e) {
+      console.warn(e);
+    }
+
+    /*
     exercise.key 
       ? dispatch(saveExercise(data)) 
       : dispatch(addExercise(data))
-    navigation.goBack();
+    */
+    
   };
 
   return (
