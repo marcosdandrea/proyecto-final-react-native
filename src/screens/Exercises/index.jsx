@@ -25,8 +25,10 @@ const Exercises = ({ navigation }) => {
   const dispatch = useDispatch();
   const {
     data: exerciseData,
+    refetch: getExercisesData,
     error: exerciseError,
     isLoading: exerciseIsLoading,
+    isFetching: exerciseIsFetching,
   } = useGetExercisesQuery();
   const {
     data: categoryData,
@@ -120,16 +122,7 @@ const Exercises = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {exerciseIsLoading && categoryIsLoading ? (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <ActivityIndicator
-            color={colors.foreground.secondary}
-            size={"large"}
-          />
-        </View>
-      ) : (
+
         <View>
           <Filters
             selected={filterByCategory}
@@ -147,6 +140,8 @@ const Exercises = ({ navigation }) => {
           <FlatList
             style={styles.exerciseList}
             contentContainerStyle={styles.exerciseListContainer}
+            onRefresh={()=> getExercisesData()}
+            refreshing={false}
             data={filteredExercises}
             renderItem={({ item }) => (
               <PullToAction
@@ -168,7 +163,6 @@ const Exercises = ({ navigation }) => {
             )}
           />
         </View>
-      )}
     </View>
   );
 };
