@@ -6,6 +6,7 @@ import 'react-native-random-uuid'
 import { Provider } from "react-redux";
 import {store} from "./store"
 import RootNavigator from "./navigation/RootNavigation";
+import {GestureHandlerRootView} from "react-native-gesture-handler"
 
 export default function App() {
   const styles = StyleSheet.create({
@@ -15,6 +16,7 @@ export default function App() {
   });
 
   return (
+    <GestureHandlerRootView style={{flex: 1}}>
     <FontProvider>
       <Provider store={store}>
       <View style={styles.container}>
@@ -26,5 +28,6 @@ export default function App() {
       </View>
       </Provider>
     </FontProvider>
+    </GestureHandlerRootView>
   );
 }

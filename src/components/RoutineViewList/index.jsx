@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import styles from "./style"
 import { useSelector } from "react-redux";
 import { ExerciseItemForRoutine } from "..";
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 const RoutineViewList = ({currentRoutine, navigation}) => {
     const [ currentExerciseList, setCurrentExerciseList] = useState([])
@@ -20,11 +21,12 @@ const RoutineViewList = ({currentRoutine, navigation}) => {
 
     return ( 
     <View style={styles.container}> 
-        <FlatList
+        <DraggableFlatList
             contentContainerStyle={styles.exerciseList}
+            onDragEnd={({data}) => console.log(data)}
             data={currentExerciseList}
             keyExtractor={(item)=>item.key}
-            renderItem={({item})=><ExerciseItemForRoutine item={item} navigation={navigation}/>}
+            renderItem={ExerciseItemForRoutine}
         />
     </View> 
     );

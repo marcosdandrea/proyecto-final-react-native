@@ -22,11 +22,13 @@ export default styles = StyleSheet.create({
       paddingVertical: 15,
       justifyContent: "center",
       alignItems: "center",
-      paddingBottom: 30
+      paddingBottom: 30,
+      width: "100%"
     },
     routines: {
       flex: 1,
-      width: Dimensions.get("window").width - 45,
+      width: "100%",
+      //width: Dimensions.get("window").width - 45,
       borderRadius: 5,
       paddingBottom: 10
     },

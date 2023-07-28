@@ -21,6 +21,7 @@ import {
   useRemoveExerciseMutation,
 } from "../../store/exercises/exercises.API";
 
+
 const Exercises = ({ navigation }) => {
   const dispatch = useDispatch();
   const {
@@ -51,6 +52,7 @@ const Exercises = ({ navigation }) => {
   const [filteredExercises, setFilteredExercises] = useState([]);
 
   useEffect(() => {
+    if (!categoryData) return
     if (exerciseIsLoading) return;
     const allExercises = Object.keys(exerciseData).map((key) => {
       const category = {
