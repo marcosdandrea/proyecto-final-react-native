@@ -10,5 +10,8 @@ export const icons = {
     search: require("./search.png"),
     clear: require("./clear.png"),
     done: require("./done.png"),
-    back: require("./back.png")
+    back: require("./back.png"),
+    drag: require("./drag.png"),
+    moveVert: require("./moveVert.png"),
+    add: require("./add.png"),
 }

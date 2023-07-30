@@ -1,15 +1,29 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { colors } from "../../theme";
 import { Fonts } from "../../../assets/fonts/FontProvider";
 
 export default styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: Dimensions.get("window").width - 45,
     height: 60,
     borderRadius: 5,
     backgroundColor: colors.background.secondary,
     padding: 10,
-    justifyContent: "center"
+    justifyContent: "flex-start",
+    flexDirection: "row"
+  },
+  bodyContainer: {
+    flex: 1
+  },
+  gripContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  dragIndicator: {
+    width: 20,
+    height: 20,
+    tintColor: colors.foreground.informative
   },
   setContainer: {
     flexDirection: "row",

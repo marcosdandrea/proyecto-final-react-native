@@ -13,11 +13,12 @@ import { icons } from "../../theme/icons";
 import {
   useAddNewExercisesMutation,
   useGetCategoriesQuery,
+  useGetExercisesQuery,
   useSaveExercisesMutation,
 } from "../../store/exercises/exercises.API";
 
 const EditExercise = ({ navigation, route }) => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const { exercise } = route.params || { exercise: undefined };
   const { data: _categories, isLoading: loadingCategories } =
@@ -30,19 +31,19 @@ const EditExercise = ({ navigation, route }) => {
     saveExercise,
     { data: savingExerciseData, isLoading: isLoadingSaveExercise },
   ] = useSaveExercisesMutation();
+  const { data: exercises, isLoading: loadingExercises } =
+    useGetExercisesQuery();
 
   //const _categories = useSelector((state) => state.exercises.categories);
   const [categories, setCategories] = useState([]);
 
-  const [exerciseName, setExerciseName] = useState(exercise.name);
+  const [exerciseName, setExerciseName] = useState(
+    exercises[exercise.key].name
+  );
   const [exerciseCategory, setExerciseCategory] = useState();
-  const [exerciseDescription, setExerciseDescription] = useState(
-    exercise.description
-  );
-  const [exerciseUnit, setExerciseUnit] = useState(exercise.unit);
-  const [exerciseIncrement, setExerciseIncrement] = useState(
-    exercise.increment
-  );
+  const [exerciseDescription, setExerciseDescription] = useState(exercises[exercise.key].description);
+  const [exerciseUnit, setExerciseUnit] = useState(exercises[exercise.key].unit);
+  const [exerciseIncrement, setExerciseIncrement] = useState(exercises[exercise.key].increment);
 
   useEffect(() => {
     const newCategories = Object.keys(_categories).map((key) => {
@@ -52,15 +53,16 @@ const EditExercise = ({ navigation, route }) => {
   }, [_categories]);
 
   useEffect(() => {
+    if (loadingExercises) return
     if (
       Object.keys(categories).length == 0 ||
       Object.keys(exercise).length == 0
     )
       return;
     setExerciseCategory(
-      categories.find((category) => category.key == exercise.category.key)
+      categories.find((category) => category.key == exercises[exercise.key].category)
     );
-  }, [exercise, categories]);
+  }, [exercises, exercise, categories]);
 
   const handleSaveExercise = async () => {
     const data = {
@@ -75,7 +77,7 @@ const EditExercise = ({ navigation, route }) => {
       exercise.key
         ? await saveExercise({ data, key: exercise.key })
         : await createExercise({ data });
-        navigation.goBack();
+      navigation.goBack();
     } catch (e) {
       console.warn(e);
     }
@@ -85,7 +87,6 @@ const EditExercise = ({ navigation, route }) => {
       ? dispatch(saveExercise(data)) 
       : dispatch(addExercise(data))
     */
-    
   };
 
   return (
@@ -127,7 +128,7 @@ const EditExercise = ({ navigation, route }) => {
           dropdownStyle={styles.dropdown.list}
           rowTextStyle={styles.dropdown.text}
           defaultValue={exerciseUnit}
-          data={["kg", "seg", "unit"]}
+          data={["kg", "seg", "unit", "repeticiones"]}
         />
       </View>
       <View style={styles.selectorContainer}>
