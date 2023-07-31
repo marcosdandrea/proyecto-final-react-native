@@ -103,7 +103,9 @@ const Routines = ({ navigation }) => {
   const handleOnSaveRoutineOrder = async ({ data }) => {
     const exercisesReordered = data.map((exercise) => {
       return {
-        amount: exercise.amount,
+        notes: exercise.notes,
+        sets: exercise.sets,
+        weigth: exercise.weigth,
         sets: exercise.sets,
         exerciseID: exercise.key,
       };
@@ -125,7 +127,6 @@ const Routines = ({ navigation }) => {
     if (Object.keys(currentRoutine).length === 0) return;
     setCurrentExerciseList(() => {
       return currentRoutine.exercises.map((exercise, index) => {
-        console.log(exercise.exerciseID);
         const exerciseData = _exercises[exercise.exerciseID];
         return {
           ...currentRoutine.exercises[index],
@@ -192,17 +193,36 @@ const Routines = ({ navigation }) => {
                 data={currentExerciseList}
                 keyExtractor={(item) => item.key}
                 renderItem={({ item, drag }) =>
-                  ExerciseItemForRoutine({ item, drag, navigation })
+                  ExerciseItemForRoutine({
+                    item,
+                    drag,
+                    navigation,
+                    onPress: ({ exercise }) =>
+                      navigation.navigate("Exercises Sets", {
+                        exercise,
+                        routine: currentRoutine,
+                      }),
+                  })
                 }
               />
             </View>
             <View style={styles.newExerciseItem}>
               <StandarIconButton
+                onPress={() =>
+                  navigation.navigate("Exercise Explorer", {
+                    routine: currentRoutine,
+                  })
+                }
                 icon={icons.add}
                 text="add exercise"
                 iconTint={colors.foreground.informative}
                 textProperties={{ color: colors.foreground.informative }}
-                buttonProperties={{ width: "100%", height: "100%", justifyContent: "flex-start", paddingLeft: 10 }}
+                buttonProperties={{
+                  width: "100%",
+                  height: "100%",
+                  justifyContent: "flex-start",
+                  paddingLeft: 10,
+                }}
               />
             </View>
           </View>

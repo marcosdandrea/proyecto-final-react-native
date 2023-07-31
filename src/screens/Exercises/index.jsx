@@ -4,7 +4,6 @@ import {
   Dimensions,
   Image,
   Alert,
-  ActivityIndicator,
 } from "react-native";
 import InputTextLabeled from "../../components/InputTextLabeled";
 import colors from "../../theme/colors";

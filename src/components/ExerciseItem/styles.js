@@ -37,7 +37,7 @@ export default styles = StyleSheet.create({
   },
 
   decoration: {
-    height: 8,
+    height: 3,
     width: "105%",
     position: "absolute",
     bottom: -5,

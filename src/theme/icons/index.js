@@ -14,4 +14,10 @@ export const icons = {
     drag: require("./drag.png"),
     moveVert: require("./moveVert.png"),
     add: require("./add.png"),
+    remove: require("./remove.png"),
+    weight: require("./weight.png"),
+    sets: require("./sets.png"),
+    reps: require("./reps.png"),
+    rest: require("./rest.png"),
+    notes: require("./notes.png"),
 }

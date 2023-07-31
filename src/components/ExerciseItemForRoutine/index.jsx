@@ -9,8 +9,7 @@ import { icons } from "../../theme/icons";
 import IconButton from "../IconButton";
 import { colors } from "../../theme";
 
-const ExerciseItemForRoutine = ({ item, drag, navigation }) => {
-
+const ExerciseItemForRoutine = ({ item, drag, navigation, onPress }) => {
   const onEditExercise = () => {
     navigation.navigate("Edit Exercise", { exercise: item });
   };
@@ -18,7 +17,8 @@ const ExerciseItemForRoutine = ({ item, drag, navigation }) => {
   return (
     <ScaleDecorator>
       <OpacityDecorator>
-        <View style={styles.container}>
+
+        <TouchableOpacity style={styles.container} onPress={()=>onPress({exercise: item})}>
           <TouchableOpacity onPressIn={drag} style={styles.gripContainer}>
             <Image style={styles.dragIndicator} source={icons.moveVert} />
           </TouchableOpacity>
@@ -38,7 +38,7 @@ const ExerciseItemForRoutine = ({ item, drag, navigation }) => {
             icon={icons.edit}
             iconTintColor={colors.foreground.informative}
           />
-        </View>
+        </TouchableOpacity>
       </OpacityDecorator>
     </ScaleDecorator>
   );

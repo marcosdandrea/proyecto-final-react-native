@@ -4,7 +4,7 @@ export default COLORS = {
     secondary: "#008D1F",
     terciary: "#9B2792",
     error: "#ed4c01",
-    warning: "#ffc800",
+    warning: "#ffb300",
     black: "#1F2729",
     informative: "#D1D6DA",
     white: "#ffffff",
