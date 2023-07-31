@@ -1,6 +1,8 @@
 import {
+  Animated,
   FlatList,
   Image,
+  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,6 +13,7 @@ import { AddButton, CustomText, IconButton } from "../../components";
 import { icons } from "../../theme/icons";
 import { colors } from "../../theme";
 import { useEffect, useState } from "react";
+import { useCardAnimation } from "@react-navigation/stack";
 
 const Notes = ({ props }) => {
   return (
@@ -29,10 +32,11 @@ const Notes = ({ props }) => {
 const Weight = ({ props }) => {
   return (
     <View style={{ ...styles.setGroup.repsContainer }}>
-      <AddButton 
-      onPress={() => props.onEditWeight({ index: props.index, cmd: "down" })}
-      style={styles.setGroup.button} 
-      icon={icons.remove} />
+      <AddButton
+        onPress={() => props.onEditWeight({ index: props.index, cmd: "down" })}
+        style={styles.setGroup.button}
+        icon={icons.remove}
+      />
       <View style={styles.setGroup.texts}>
         <CustomText text="Weight" style={styles.setGroup.label} />
         <CustomText
@@ -40,9 +44,10 @@ const Weight = ({ props }) => {
           style={styles.setGroup.labelItem}
         />
       </View>
-      <AddButton 
-      onPress={() => props.onEditWeight({ index: props.index, cmd: "up" })}
-      style={styles.setGroup.button} />
+      <AddButton
+        onPress={() => props.onEditWeight({ index: props.index, cmd: "up" })}
+        style={styles.setGroup.button}
+      />
     </View>
   );
 };
@@ -50,17 +55,19 @@ const Weight = ({ props }) => {
 const Rest = ({ props }) => {
   return (
     <View style={{ ...styles.setGroup.repsContainer }}>
-      <AddButton 
-      style={styles.setGroup.button} 
-      icon={icons.remove}         
-      onPress={() => props.onEditRest({ index: props.index, cmd: "down" })}/>
+      <AddButton
+        style={styles.setGroup.button}
+        icon={icons.remove}
+        onPress={() => props.onEditRest({ index: props.index, cmd: "down" })}
+      />
       <View style={styles.setGroup.texts}>
         <CustomText text="Rest" style={styles.setGroup.label} />
         <CustomText text={props.item.rest} style={styles.setGroup.labelItem} />
       </View>
-      <AddButton 
-      onPress={() => props.onEditRest({ index: props.index, cmd: "up" })}
-      style={styles.setGroup.button} />
+      <AddButton
+        onPress={() => props.onEditRest({ index: props.index, cmd: "up" })}
+        style={styles.setGroup.button}
+      />
     </View>
   );
 };
@@ -117,6 +124,8 @@ const itemGroup = (props) => {
 };
 
 const ExercisesSets = ({ navigation, route }) => {
+  //const { current } = useCardAnimation();
+
   const { exercise, routine } = route.params;
   const [viewMode, setViewMode] = useState(0);
   const [exerciseData, setExerciseData] = useState(setModel);
@@ -180,34 +189,48 @@ const ExercisesSets = ({ navigation, route }) => {
     });
   };
 
-  const onEditRest = (rest) => {    
+  const onEditRest = (rest) => {
     setExerciseData((prev) => {
       const newSetList = [...prev];
       newSetList[rest.index].rest =
-      rest.cmd == "up"
+        rest.cmd == "up"
           ? newSetList[rest.index].rest + 1
           : newSetList[rest.index].rest != 0
           ? newSetList[rest.index].rest - 1
           : 0;
       return newSetList;
-    });};
+    });
+  };
 
   const onEditWeight = (weight) => {
     setExerciseData((prev) => {
       const newSetList = [...prev];
       newSetList[weight.index].weight =
-      weight.cmd == "up"
+        weight.cmd == "up"
           ? newSetList[weight.index].weight + 0.25
           : newSetList[weight.index].weight != 0
           ? newSetList[weight.index].weight - 0.25
           : 0;
       return newSetList;
-    })
+    });
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.modal}>
+    <Pressable style={styles.container} onPress={navigation.goBack}>
+      <Animated.View
+        style={{
+          ...styles.modal,
+          /* transform: [
+            {
+              scale: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.9, 1],
+                extrapolate: "clamp",
+              }),
+            },
+          ], */
+        }}
+      >
         <View style={styles.header}>
           <IconButton
             icon={icons.back}
@@ -272,8 +295,8 @@ const ExercisesSets = ({ navigation, route }) => {
           <Image source={icons.add} style={styles.newSetIcon} />
           <CustomText text="Add new set" style={styles.newSetButtonText} />
         </TouchableOpacity>
-      </View>
-    </View>
+      </Animated.View>
+    </Pressable>
   );
 };
 

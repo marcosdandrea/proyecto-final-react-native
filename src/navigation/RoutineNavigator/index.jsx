@@ -60,15 +60,15 @@ const RoutineNavigator = () => {
 
       <StackNavigator.Screen
         name="Exercises Sets"
-        options={({ navigation, route }) => ({
-          presentation: "modal",
-          contentStyle: {backgroundColor: "#000000aa"},
-          headerShown: "false",
-          headerLeft: () => BackButton({ navigation, route }),
-        })}
-        
+        options={{
+          animation: "fade",
+          animationTypeForReplace: "pop",
+          presentation: "transparentModal",
+          headerShown: false,
+        }}
         component={ExercisesSets}
       />
+
     </StackNavigator.Navigator>
   );
 };

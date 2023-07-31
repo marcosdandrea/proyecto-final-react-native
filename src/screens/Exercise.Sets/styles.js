@@ -7,6 +7,7 @@ export default styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#000000aa"
   },
   modal: {
     width: "80%",
