@@ -9,14 +9,13 @@ export const routinesAPI = createApi({
   tagTypes: ["routines"],
 
   endpoints: (builder) => ({
-
     getAllRoutines: builder.query({
       query: () => "/routines.json",
       providesTags: ["routines"],
     }),
 
     getSingleRoutine: builder.query({
-      query: ({key}) => `/routines/${key}.json`,
+      query: ({ key }) => `/routines/${key}.json`,
       providesTags: ["routines"],
     }),
 
@@ -30,20 +29,52 @@ export const routinesAPI = createApi({
           body: routine,
         };
       },
-      async onQueryStarted({ routine, key }, {dispatch, queryFulfilled }) { 
+      async onQueryStarted({ routine, key }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          routinesAPI.util.updateQueryData("getAllRoutines", undefined, (draft)=>{
-            draft[key] = routine
-          })
-        )
+          routinesAPI.util.updateQueryData(
+            "getAllRoutines",
+            undefined,
+            (draft) => {
+              draft[key] = routine;
+            }
+          )
+        );
         try {
-          await queryFulfilled
+          await queryFulfilled;
         } catch {
-          patchResult.undo()
+          patchResult.undo();
         }
       },
+    }),
+
+    patchRoutineExercise: builder.mutation({
+      query: ({ exercise, routineID, index }) => {
+        return {
+          url: `/routines/${routineID}/exercises/${index}.json`,
+          method: "PATCH",
+          body: exercise,
+        };
+      },
+      invalidatesTags: ["routines"],
+    }),
+
+    addExerciseToRoutine: builder.mutation({
+      query: ({ exercise, routineID }) => {
+        return {
+          url: `/routines/${routineID}/exercises.json`,
+          method: "POST",
+          body: exercise,
+        };
+      },
+      invalidatesTags: ["routines"],
     }),
   }),
 });
 
-export const { useGetAllRoutinesQuery, useGetSingleRoutineQuery, useSaveRoutineMutation } = routinesAPI;
+export const {
+  useGetAllRoutinesQuery,
+  useGetSingleRoutineQuery,
+  useSaveRoutineMutation,
+  usePatchRoutineExerciseMutation,
+  useAddExerciseToRoutineMutation,
+} = routinesAPI;

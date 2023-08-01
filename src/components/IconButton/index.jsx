@@ -4,6 +4,7 @@ import colors from "../../theme/colors";
 const IconButton = ({
   onPress,
   backgroundColor = colors.foreground.primary,
+  borderRadius = 30,
   icon,
   iconStyle,
   iconTintColor = colors.foreground.white,
@@ -23,7 +24,7 @@ const IconButton = ({
         width: size + 20,
         height: size + 20,
         backgroundColor: backgroundColor,
-        borderRadius: 30,
+        borderRadius,
         justifyContent: "center",
         alignItems: "center",
       }}

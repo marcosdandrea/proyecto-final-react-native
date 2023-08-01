@@ -34,7 +34,7 @@ export default styles = StyleSheet.create({
   list: {
     marginTop: 15,
     width: "100%",
-    marginBottom: 5
+    marginBottom: 5,
   },
   listContainer: {
     gap: 8,
@@ -60,13 +60,13 @@ export default styles = StyleSheet.create({
       justifyContent: "flex-start",
       alignItems: "center",
       flexDirection: "row",
-      paddingRight: 35,
       backgroundColor: colors.background.terciary,
       overflow: "hidden",
       borderRadius: 5,
     },
     repsContainer: {
-      width: 290,
+      flex: 1,
+      marginRight: 35,
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "row",
@@ -146,11 +146,22 @@ export default styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     backgroundColor: colors.foreground.secondary,
+    marginBottom: 10,
   },
   newSetButtonText:{
     color: colors.foreground.white,
     fontFamily: Fonts.Bold,
     fontSize: 14,
+  },
+  removeButton:{
+    width: "100%",
+    height: 40,
+    flexDirection: "row",
+    columnGap: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    backgroundColor: colors.foreground.primary,
   },
   newSetIcon:{
     width: 20,

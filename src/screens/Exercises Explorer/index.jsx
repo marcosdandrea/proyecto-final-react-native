@@ -124,7 +124,7 @@ const ExercisesExplorer = ({navigation, route}) => {
   }
 
   const onSelectExercise = (exercise) => {
-    navigation.navigate("Exercises Sets", {exercise});
+    navigation.navigate("Exercises Sets", {exercise, routine});
   };
 
   return (

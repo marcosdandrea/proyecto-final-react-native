@@ -1,5 +1,4 @@
 import {
-  Animated,
   FlatList,
   Image,
   Pressable,
@@ -13,7 +12,8 @@ import { AddButton, CustomText, IconButton } from "../../components";
 import { icons } from "../../theme/icons";
 import { colors } from "../../theme";
 import { useEffect, useState } from "react";
-import { useCardAnimation } from "@react-navigation/stack";
+import { useAddExerciseToRoutineMutation, usePatchRoutineExerciseMutation } from "../../store/routines/routines.API";
+import { useGetExercisesQuery } from "../../store/exercises/exercises.API";
 
 const Notes = ({ props }) => {
   return (
@@ -124,13 +124,16 @@ const itemGroup = (props) => {
 };
 
 const ExercisesSets = ({ navigation, route }) => {
-  //const { current } = useCardAnimation();
-
-  const { exercise, routine } = route.params;
+  const { exercise, routine, index } = route.params;
   const [viewMode, setViewMode] = useState(0);
+  const setModel = [{ rest: [0], sets: [0], weight: [0], notes: [""], exerciseID: exercise.exerciseID || exercise.key }];
   const [exerciseData, setExerciseData] = useState(setModel);
 
-  const setModel = [{ rest: 0, sets: 0, weight: 0 }];
+  const [triggerPatchRoutine, {  }] =
+    usePatchRoutineExerciseMutation();
+
+  const [addExerciseToRoutine, {  }] =
+    useAddExerciseToRoutineMutation();
 
   useEffect(() => {
     if (exercise.sets) {
@@ -140,11 +143,35 @@ const ExercisesSets = ({ navigation, route }) => {
           rest: exercise.rest[index],
           weight: exercise.weight[index],
           notes: exercise.notes[index],
+          exerciseID: exercise.exerciseID,
         };
       });
       setExerciseData(_exerciseData);
     }
   }, [exercise]);
+
+  console.log 
+
+  const handleOnSaveSets = () => {
+    if (!exerciseData) return;
+    let parsedExercises = {notes: [], sets: [], rest: [], weight: [], exerciseID: exerciseData[0].exerciseID}
+      Object.keys(exerciseData).forEach(set=> {
+        parsedExercises.sets[set] = exerciseData[set].sets
+        parsedExercises.rest[set] = exerciseData[set].rest
+        parsedExercises.weight[set] = exerciseData[set].weight
+        parsedExercises.notes[set] = exerciseData[set].notes
+      })
+      saveRoutine({parsedExercises});
+      navigation.goBack();
+    }
+
+  const saveRoutine = async ({parsedExercises}) => {
+    try{
+      triggerPatchRoutine({exercise: parsedExercises, routineID: routine.key, index: index || routine.exercises.length})
+    }catch(err){
+      console.warn(err)
+    }
+  };
 
   const handleOnGoBack = () => {
     navigation.goBack();
@@ -152,7 +179,7 @@ const ExercisesSets = ({ navigation, route }) => {
 
   const handleAddNewSet = () => {
     setExerciseData((prev) => {
-      if (exerciseData.length != 0) {
+      if (exerciseData && exerciseData.length != 0) {
         return [...prev, prev[exerciseData.length - 1]];
       } else {
         return setModel;
@@ -181,9 +208,9 @@ const ExercisesSets = ({ navigation, route }) => {
       const newSetList = [...prev];
       newSetList[set.index].sets =
         set.cmd == "up"
-          ? newSetList[set.index].sets + 1
-          : newSetList[set.index].sets != 0
-          ? newSetList[set.index].sets - 1
+          ? parseInt(newSetList[set.index].sets) + 1
+          : parseInt(newSetList[set.index].sets) != 0
+          ? parseInt(newSetList[set.index].sets) - 1
           : 0;
       return newSetList;
     });
@@ -194,9 +221,9 @@ const ExercisesSets = ({ navigation, route }) => {
       const newSetList = [...prev];
       newSetList[rest.index].rest =
         rest.cmd == "up"
-          ? newSetList[rest.index].rest + 1
-          : newSetList[rest.index].rest != 0
-          ? newSetList[rest.index].rest - 1
+          ? parseInt(newSetList[rest.index].rest) + 1
+          : parseInt(newSetList[rest.index].rest) != 0
+          ? parseInt(newSetList[rest.index].rest) - 1
           : 0;
       return newSetList;
     });
@@ -207,30 +234,17 @@ const ExercisesSets = ({ navigation, route }) => {
       const newSetList = [...prev];
       newSetList[weight.index].weight =
         weight.cmd == "up"
-          ? newSetList[weight.index].weight + 0.25
-          : newSetList[weight.index].weight != 0
-          ? newSetList[weight.index].weight - 0.25
+          ? parseFloat(newSetList[weight.index].weight) + 0.25
+          : parseFloat(newSetList[weight.index].weight) != 0
+          ? parseFloat(newSetList[weight.index].weight) - 0.25
           : 0;
       return newSetList;
     });
   };
 
   return (
-    <Pressable style={styles.container} onPress={navigation.goBack}>
-      <Animated.View
-        style={{
-          ...styles.modal,
-          /* transform: [
-            {
-              scale: current.progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0.9, 1],
-                extrapolate: "clamp",
-              }),
-            },
-          ], */
-        }}
-      >
+    <Pressable style={styles.container}>
+      <View style={styles.modal}>
         <View style={styles.header}>
           <IconButton
             icon={icons.back}
@@ -238,7 +252,14 @@ const ExercisesSets = ({ navigation, route }) => {
             onPress={handleOnGoBack}
           />
           <CustomText style={styles.title} text={"Sets for this exercise"} />
-          <View style={{ width: 25 }}></View>
+          <IconButton
+            onPress={handleOnSaveSets}
+            icon={icons.save}
+            iconStyle={{width: 22, height: 22}}
+            backgroundColor={colors.foreground.secondary}
+            borderRadius={5}
+            size={15}
+          />
         </View>
         <View style={styles.menuBar}>
           <IconButton
@@ -295,7 +316,11 @@ const ExercisesSets = ({ navigation, route }) => {
           <Image source={icons.add} style={styles.newSetIcon} />
           <CustomText text="Add new set" style={styles.newSetButtonText} />
         </TouchableOpacity>
-      </Animated.View>
+        <TouchableOpacity style={styles.removeButton} onPress={()=>console.log ("remove exercise")}>
+          <Image source={icons.garbage} style={styles.newSetIcon} />
+          <CustomText text="Remove exercise" style={styles.newSetButtonText} />
+        </TouchableOpacity>
+      </View>
     </Pressable>
   );
 };

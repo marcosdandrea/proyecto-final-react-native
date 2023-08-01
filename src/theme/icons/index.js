@@ -20,4 +20,6 @@ export const icons = {
     reps: require("./reps.png"),
     rest: require("./rest.png"),
     notes: require("./notes.png"),
+    save: require("./save.png"),
+    garbage: require("./garbage.png"),
 }

@@ -101,12 +101,13 @@ const Routines = ({ navigation }) => {
   };
 
   const handleOnSaveRoutineOrder = async ({ data }) => {
+
     const exercisesReordered = data.map((exercise) => {
       return {
         notes: exercise.notes,
         sets: exercise.sets,
-        weigth: exercise.weigth,
-        sets: exercise.sets,
+        weight: exercise.weight,
+        rest: exercise.rest,
         exerciseID: exercise.key,
       };
     });
@@ -192,7 +193,7 @@ const Routines = ({ navigation }) => {
                 onDragEnd={handleOnSaveRoutineOrder}
                 data={currentExerciseList}
                 keyExtractor={(item) => item.key}
-                renderItem={({ item, drag }) =>
+                renderItem={({ item, getIndex, drag }) =>
                   ExerciseItemForRoutine({
                     item,
                     drag,
@@ -201,6 +202,7 @@ const Routines = ({ navigation }) => {
                       navigation.navigate("Exercises Sets", {
                         exercise,
                         routine: currentRoutine,
+                        index: getIndex(),
                       }),
                   })
                 }
