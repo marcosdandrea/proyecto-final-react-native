@@ -22,4 +22,6 @@ export const icons = {
     notes: require("./notes.png"),
     save: require("./save.png"),
     garbage: require("./garbage.png"),
+    quick: require("./quick.png"),
+    bolt: require("./bolt.png"),
 }

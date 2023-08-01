@@ -49,7 +49,7 @@ const Routines = ({ navigation }) => {
     const routines = Object.keys(_routines).map((key) => {
       return { ..._routines[key], key };
     });
-
+    
     setRoutines(routines);
   }, [_routines]);
 

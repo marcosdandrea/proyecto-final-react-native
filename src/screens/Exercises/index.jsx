@@ -26,14 +26,16 @@ const Exercises = ({ navigation }) => {
   const {
     data: exerciseData,
     refetch: getExercisesData,
-    error: exerciseError,
+    isError: exerciseError,
     isLoading: exerciseIsLoading,
     isFetching: exerciseIsFetching,
+    isSuccess: exerciseIsSuccess,
   } = useGetExercisesQuery();
   const {
     data: categoryData,
-    error: categoryError,
+    isError: categoryError,
     isLoading: categoryIsLoading,
+    isSuccess: categoryIsSuccess,
   } = useGetCategoriesQuery();
 
   const [deleteExercise, { error: deleteExerciseError }] =
@@ -51,8 +53,7 @@ const Exercises = ({ navigation }) => {
   const [filteredExercises, setFilteredExercises] = useState([]);
 
   useEffect(() => {
-    if (!categoryData) return
-    if (exerciseIsLoading) return;
+    if (!exerciseIsSuccess || !categoryIsSuccess) return;
     const allExercises = Object.keys(exerciseData).map((key) => {
       const category = {
         category: {
@@ -64,7 +65,7 @@ const Exercises = ({ navigation }) => {
       return exercise;
     });
     setExercises(allExercises);
-  }, [exerciseData]);
+  }, [exerciseIsSuccess, categoryIsSuccess]);
 
   useEffect(
     () => setFilteredExercises(runAllFilters(exercises)),

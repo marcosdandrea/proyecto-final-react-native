@@ -17,6 +17,7 @@ export default styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 10,
     backgroundColor: colors.background.secondary,
+    zIndex: -1
   },
   header:{
     width: "100%",
@@ -61,8 +62,8 @@ export default styles = StyleSheet.create({
       alignItems: "center",
       flexDirection: "row",
       backgroundColor: colors.background.terciary,
-      overflow: "hidden",
       borderRadius: 5,
+      zIndex: -3
     },
     repsContainer: {
       flex: 1,
@@ -79,6 +80,7 @@ export default styles = StyleSheet.create({
       opacity: 0.05,
       justifyContent: "center",
       alignItems: "center",
+      overflow: "hidden",
     },
     setLabel: {
       color: colors.foreground.white,
@@ -131,6 +133,7 @@ export default styles = StyleSheet.create({
     right: 0,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: -1
   },
   deleteIcon: {
     width: 22,

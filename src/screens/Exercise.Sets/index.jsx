@@ -8,12 +8,21 @@ import {
   View,
 } from "react-native";
 import styles from "./styles";
-import { AddButton, CustomText, IconButton } from "../../components";
+import {
+  AddButton,
+  CustomText,
+  IconButton,
+  CustomQuickTip,
+} from "../../components";
 import { icons } from "../../theme/icons";
 import { colors } from "../../theme";
-import { useEffect, useState } from "react";
-import { useAddExerciseToRoutineMutation, usePatchRoutineExerciseMutation } from "../../store/routines/routines.API";
+import { useContext, useEffect, useRef, useState } from "react";
+import {
+  useAddExerciseToRoutineMutation,
+  usePatchRoutineExerciseMutation,
+} from "../../store/routines/routines.API";
 import { useGetExercisesQuery } from "../../store/exercises/exercises.API";
+import { QuickTipContext } from "../../components/CustomQuickTip";
 
 const Notes = ({ props }) => {
   return (
@@ -88,6 +97,39 @@ const Reps = ({ props }) => {
         style={styles.setGroup.button}
         onPress={() => props.onEditSets({ index: props.index, cmd: "up" })}
       />
+      <QuickTipButton />
+    </View>
+  );
+};
+
+const QuickTipButton = () => {
+  const quickTip = useContext(QuickTipContext);
+  const [thisBtnPosition, setThisBtnPosition] = useState()
+  const buttonRef = useRef();
+
+  useEffect(() => {
+    setTimeout(() => {
+      const button = buttonRef.current;
+      button.measure((fx, fy, width, height, px, py) => {
+        if (px !== null) 
+        setThisBtnPosition({ x: px + 15, y: py + 30});
+      });
+    }, 0);
+  }, []);
+
+  const showQuickTip = ()=>{
+    quickTip.setBtnPosition(thisBtnPosition);
+    quickTip.setShow(prev => !prev);
+  }
+
+  return (
+    <View ref={buttonRef}>
+      <AddButton
+        icon={icons.bolt}
+        iconStyle={{ width: 20, height: 20 }}
+        style={styles.setGroup.button}
+        onPress={showQuickTip}
+      />
     </View>
   );
 };
@@ -126,14 +168,20 @@ const itemGroup = (props) => {
 const ExercisesSets = ({ navigation, route }) => {
   const { exercise, routine, index } = route.params;
   const [viewMode, setViewMode] = useState(0);
-  const setModel = [{ rest: [0], sets: [0], weight: [0], notes: [""], exerciseID: exercise.exerciseID || exercise.key }];
+  const setModel = [
+    {
+      rest: [0],
+      sets: [0],
+      weight: [0],
+      notes: [""],
+      exerciseID: exercise.exerciseID || exercise.key,
+    },
+  ];
   const [exerciseData, setExerciseData] = useState(setModel);
 
-  const [triggerPatchRoutine, {  }] =
-    usePatchRoutineExerciseMutation();
+  const [triggerPatchRoutine, {}] = usePatchRoutineExerciseMutation();
 
-  const [addExerciseToRoutine, {  }] =
-    useAddExerciseToRoutineMutation();
+  const [addExerciseToRoutine, {}] = useAddExerciseToRoutineMutation();
 
   useEffect(() => {
     if (exercise.sets) {
@@ -150,26 +198,36 @@ const ExercisesSets = ({ navigation, route }) => {
     }
   }, [exercise]);
 
-  console.log 
+  console.log;
 
   const handleOnSaveSets = () => {
     if (!exerciseData) return;
-    let parsedExercises = {notes: [], sets: [], rest: [], weight: [], exerciseID: exerciseData[0].exerciseID}
-      Object.keys(exerciseData).forEach(set=> {
-        parsedExercises.sets[set] = exerciseData[set].sets
-        parsedExercises.rest[set] = exerciseData[set].rest
-        parsedExercises.weight[set] = exerciseData[set].weight
-        parsedExercises.notes[set] = exerciseData[set].notes
-      })
-      saveRoutine({parsedExercises});
-      navigation.goBack();
-    }
+    let parsedExercises = {
+      notes: [],
+      sets: [],
+      rest: [],
+      weight: [],
+      exerciseID: exerciseData[0].exerciseID,
+    };
+    Object.keys(exerciseData).forEach((set) => {
+      parsedExercises.sets[set] = exerciseData[set].sets;
+      parsedExercises.rest[set] = exerciseData[set].rest;
+      parsedExercises.weight[set] = exerciseData[set].weight;
+      parsedExercises.notes[set] = exerciseData[set].notes;
+    });
+    saveRoutine({ parsedExercises });
+    navigation.goBack();
+  };
 
-  const saveRoutine = async ({parsedExercises}) => {
-    try{
-      triggerPatchRoutine({exercise: parsedExercises, routineID: routine.key, index: index || routine.exercises.length})
-    }catch(err){
-      console.warn(err)
+  const saveRoutine = async ({ parsedExercises }) => {
+    try {
+      triggerPatchRoutine({
+        exercise: parsedExercises,
+        routineID: routine.key,
+        index: index || routine.exercises.length,
+      });
+    } catch (err) {
+      console.warn(err);
     }
   };
 
@@ -243,85 +301,100 @@ const ExercisesSets = ({ navigation, route }) => {
   };
 
   return (
-    <Pressable style={styles.container}>
-      <View style={styles.modal}>
-        <View style={styles.header}>
-          <IconButton
-            icon={icons.back}
-            backgroundColor={"transparent"}
-            onPress={handleOnGoBack}
+    
+      <Pressable style={styles.container}>
+        <CustomQuickTip>
+        <View style={styles.modal}>
+          <View style={styles.header}>
+            <IconButton
+              icon={icons.back}
+              backgroundColor={"transparent"}
+              onPress={handleOnGoBack}
+            />
+            <CustomText style={styles.title} text={"Sets for this exercise"} />
+            <IconButton
+              onPress={handleOnSaveSets}
+              icon={icons.save}
+              iconStyle={{ width: 22, height: 22 }}
+              backgroundColor={colors.foreground.secondary}
+              borderRadius={5}
+              size={15}
+            />
+          </View>
+          <View style={styles.menuBar}>
+            <IconButton
+              size={15}
+              icon={icons.reps}
+              iconStyle={{ width: 22, height: 22 }}
+              backgroundColor={colors.background.primary}
+              onPress={() => setViewMode(0)}
+            />
+
+            <IconButton
+              size={15}
+              icon={icons.weight}
+              iconStyle={{ width: 22, height: 22 }}
+              backgroundColor={colors.background.primary}
+              onPress={() => setViewMode(2)}
+            />
+
+            <IconButton
+              size={15}
+              icon={icons.rest}
+              iconStyle={{ width: 22, height: 22 }}
+              backgroundColor={colors.background.primary}
+              onPress={() => setViewMode(1)}
+            />
+
+            <IconButton
+              size={15}
+              icon={icons.notes}
+              iconStyle={{ width: 22, height: 22 }}
+              backgroundColor={colors.background.primary}
+              onPress={() => setViewMode(3)}
+            />
+          </View>
+          
+          <FlatList
+            style={styles.list}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.listContainer}
+            data={exerciseData}
+            renderItem={({ item, index }) =>
+              itemGroup({
+                item,
+                index,
+                viewMode,
+                onDeleteSet,
+                onEditSets,
+                onEditWeight,
+                onEditNotes,
+                onEditRest,
+              })
+            }
           />
-          <CustomText style={styles.title} text={"Sets for this exercise"} />
-          <IconButton
-            onPress={handleOnSaveSets}
-            icon={icons.save}
-            iconStyle={{width: 22, height: 22}}
-            backgroundColor={colors.foreground.secondary}
-            borderRadius={5}
-            size={15}
-          />
+
+          <TouchableOpacity
+            style={styles.newSetButton}
+            onPress={handleAddNewSet}
+          >
+            <Image source={icons.add} style={styles.newSetIcon} />
+            <CustomText text="Add new set" style={styles.newSetButtonText} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.removeButton}
+            onPress={() => console.log("remove exercise")}
+          >
+            <Image source={icons.garbage} style={styles.newSetIcon} />
+            <CustomText
+              text="Remove exercise"
+              style={styles.newSetButtonText}
+            />
+          </TouchableOpacity>
         </View>
-        <View style={styles.menuBar}>
-          <IconButton
-            size={15}
-            icon={icons.reps}
-            iconStyle={{ width: 22, height: 22 }}
-            backgroundColor={colors.background.primary}
-            onPress={() => setViewMode(0)}
-          />
-
-          <IconButton
-            size={15}
-            icon={icons.weight}
-            iconStyle={{ width: 22, height: 22 }}
-            backgroundColor={colors.background.primary}
-            onPress={() => setViewMode(2)}
-          />
-
-          <IconButton
-            size={15}
-            icon={icons.rest}
-            iconStyle={{ width: 22, height: 22 }}
-            backgroundColor={colors.background.primary}
-            onPress={() => setViewMode(1)}
-          />
-
-          <IconButton
-            size={15}
-            icon={icons.notes}
-            iconStyle={{ width: 22, height: 22 }}
-            backgroundColor={colors.background.primary}
-            onPress={() => setViewMode(3)}
-          />
-        </View>
-        <FlatList
-          style={styles.list}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.listContainer}
-          data={exerciseData}
-          renderItem={({ item, index }) =>
-            itemGroup({
-              item,
-              index,
-              viewMode,
-              onDeleteSet,
-              onEditSets,
-              onEditWeight,
-              onEditNotes,
-              onEditRest,
-            })
-          }
-        />
-        <TouchableOpacity style={styles.newSetButton} onPress={handleAddNewSet}>
-          <Image source={icons.add} style={styles.newSetIcon} />
-          <CustomText text="Add new set" style={styles.newSetButtonText} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.removeButton} onPress={()=>console.log ("remove exercise")}>
-          <Image source={icons.garbage} style={styles.newSetIcon} />
-          <CustomText text="Remove exercise" style={styles.newSetButtonText} />
-        </TouchableOpacity>
-      </View>
-    </Pressable>
+        </CustomQuickTip>
+      </Pressable>
+      
   );
 };
 
