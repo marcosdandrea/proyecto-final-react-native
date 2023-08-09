@@ -1,18 +1,25 @@
-import { FlatList, Image, Pressable, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import styles from "./styles";
 import { createContext, forwardRef, useEffect, useRef, useState } from "react";
 import { icons } from "../../theme/icons";
+import CustomText from "../CustomText";
 
-const MenuItem = ({ item }) => {
+const MenuItem = ({ item, onPress }) => {
   return (
-    <View style={styles.container}>
-      <Image style={styles.image} source={icons.bolt} />
-      <CustomText text={item.text} style={styles.menuItem.text} />
-    </View>
+    <TouchableOpacity onPress={()=>onPress({item})} style={styles.menuItem.container}>
+      <Image style={styles.menuItem.image} source={icons.bolt} />
+      <CustomText text={item.value} style={styles.menuItem.text} />
+    </TouchableOpacity>
   );
 };
 
-const FloatingMenu = ({ optionList, show, openPoint }) => {
+const FloatingMenu = ({ optionList, show, openPoint, onPressItem }) => {
   return (
     <View
       style={{
@@ -22,45 +29,44 @@ const FloatingMenu = ({ optionList, show, openPoint }) => {
         top: openPoint.y,
       }}
     >
-      <FlatList data={optionList} renderItem={MenuItem} />
+      <FlatList
+        data={optionList}
+        renderItem={({ item }) => MenuItem({ item, onPress: onPressItem })}
+        contentContainerStyle={styles.floatingMenu.list}
+      />
     </View>
   );
 };
-
-const options = [
-  { key: 0, text: 6 },
-  { key: 1, text: 8 },
-  { key: 2, text: 10 },
-  { key: 3, text: 12 },
-  { key: 4, text: 15 },
-];
 
 const QuickTipContext = createContext();
 
 const CustomQuickTip = ({ children }) => {
   const [btnPosition, setBtnPosition] = useState({ x: 0, y: 0 });
   const [show, setShow] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(undefined);
+  const [callback, setCallback] = useState({f: ()=>{}})
   const [optionList, setOptionList] = useState([]);
+
+  const handleOnPressItem = ({ item }) => {
+    callback.f(item);
+    setShow(false);
+  };
 
   return (
     <QuickTipContext.Provider
-      value={{ setShow, setBtnPosition, selectedOption, setOptionList }}
+      value={{ setShow, setBtnPosition, setCallback, setOptionList }}
     >
-        <FloatingMenu
-          show={show}
-          optionList={optionList}
-          onSelect={setSelectedOption}
-          openPoint={btnPosition}
-        />
-        <Pressable
-            style={{ ...styles.backdrop, display: show ? "flex" : "none"}}
-            onPress={()=>setShow(false)}
-        />
+      <FloatingMenu
+        show={show}
+        optionList={optionList}
+        openPoint={btnPosition}
+        onPressItem={handleOnPressItem}
+      />
+      <Pressable
+        style={{ ...styles.backdrop, display: show ? "flex" : "none" }}
+        onPress={() => setShow(false)}
+      />
 
-        {children}
-        
-       
+      {children}
     </QuickTipContext.Provider>
   );
 };

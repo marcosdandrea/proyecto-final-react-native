@@ -68,6 +68,18 @@ export const routinesAPI = createApi({
       },
       invalidatesTags: ["routines"],
     }),
+
+    removeExerciseFromRoutine: builder.mutation({
+      query: ({ exerciseIndex, routineID }) => {
+        console.log (exerciseIndex, routineID);
+        return {
+          url: `/routines/${routineID}/exercises/${exerciseIndex}.json`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["routines"],
+    }),
+
   }),
 });
 
@@ -77,4 +89,5 @@ export const {
   useSaveRoutineMutation,
   usePatchRoutineExerciseMutation,
   useAddExerciseToRoutineMutation,
+  useRemoveExerciseFromRoutineMutation,
 } = routinesAPI;

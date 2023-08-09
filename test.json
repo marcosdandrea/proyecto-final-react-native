@@ -1,29 +1,30 @@
-{
-    "exerciseID": "44e94452-0ebc-4529-bb0d-cc8790d135ac",
-    "key": "44e94452-0ebc-4529-bb0d-cc8790d135ac",
-    "name": "Fondos de tríceps",
-    "notes": [
-        "",
-        "",
-        "",
-        "hola"
-    ],
-    "rest": [
-        60,
-        60,
-        60,
-        60
-    ],
-    "sets": [
-        15,
-        15,
-        15,
-        15
-    ],
-    "weight": [
-        40,
-        42.5,
-        45,
-        50
-    ]
-}
+[
+    {
+        "exerciseID": "44e94452-0ebc-4529-bb0d-cc8790d135ac",
+        "notes": "",
+        "rest": 60,
+        "sets": 15,
+        "weight": 40
+    },
+    {
+        "exerciseID": "44e94452-0ebc-4529-bb0d-cc8790d135ac",
+        "notes": "",
+        "rest": 60,
+        "sets": 12,
+        "weight": 42.5
+    },
+    {
+        "exerciseID": "44e94452-0ebc-4529-bb0d-cc8790d135ac",
+        "notes": "",
+        "rest": 60,
+        "sets": 12,
+        "weight": 45
+    },
+    {
+        "exerciseID": "44e94452-0ebc-4529-bb0d-cc8790d135ac",
+        "notes": "hola",
+        "rest": 60,
+        "sets": 10,
+        "weight": 50
+    }
+]

@@ -24,4 +24,6 @@ export const icons = {
     garbage: require("./garbage.png"),
     quick: require("./quick.png"),
     bolt: require("./bolt.png"),
+    login: require("./login.png"),
+    register: require("./register.png"),
 }

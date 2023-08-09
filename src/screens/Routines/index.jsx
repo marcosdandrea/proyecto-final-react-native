@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import {
   useGetAllRoutinesQuery,
   useGetRoutinesQuery,
+  useRemoveExerciseFromRoutineMutation,
   useSaveRoutineMutation,
 } from "../../store/routines/routines.API";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -40,6 +41,8 @@ const Routines = ({ navigation }) => {
 
   const [saveRoutine, { isError, isSuccess, isLoading }] =
     useSaveRoutineMutation();
+
+  const [removeExercise] = useRemoveExerciseFromRoutineMutation()
 
   const [currentExerciseList, setCurrentExerciseList] = useState([]);
   const [routines, setRoutines] = useState();
@@ -87,6 +90,22 @@ const Routines = ({ navigation }) => {
   }, [filterRoutinesByText, routines]);
 
   useEffect(() => showCurrentSelectedRoutine(), [viewableItems]);
+
+  const handleRemoveExerciseFromRoutine = async ({index}) => {
+     
+    let newExercises = [...currentExerciseList]
+    newExercises.splice(index, 1)
+    const newData = {
+      name: currentRoutine.name,
+      exercises: newExercises,
+    };
+
+    try {
+      await saveRoutine({ key: currentRoutine.key, routine: { ...newData } });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const showCurrentSelectedRoutine = () => {
     const currentItem = viewableItems[0]?.item.key;
@@ -200,6 +219,7 @@ const Routines = ({ navigation }) => {
                     navigation,
                     onPress: ({ exercise }) =>
                       navigation.navigate("Exercises Sets", {
+                        removeExercise: ()=>handleRemoveExerciseFromRoutine({index: getIndex()}),
                         exercise,
                         routine: currentRoutine,
                         index: getIndex(),

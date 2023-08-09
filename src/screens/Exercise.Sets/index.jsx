@@ -39,55 +39,129 @@ const Notes = ({ props }) => {
 };
 
 const Weight = ({ props }) => {
+  const options = [
+    { key: 0, value: 1.25 },
+    { key: 1, value: 2.5 },
+    { key: 2, value: 5 },
+    { key: 3, value: 10 },
+    { key: 4, value: 15 },
+    { key: 5, value: 20 },
+  ]
+
+  const onSelectQuickTip = (selected) => {
+    props.onEditWeight({ index: props.index, value: selected.value })
+  }
+
+  const onReduceValue = () => {
+    if (props.item.sets == 0) return
+    const value = parseInt(props.item.weight)-1
+    props.onEditWeight({ index: props.index, value })
+  }
+
+  const onIncreaseValue = () => {
+    const value = parseInt(props.item.weight)+1
+    props.onEditWeight({ index: props.index, value })
+  }
+
   return (
-    <View style={{ ...styles.setGroup.repsContainer }}>
+    <View style={styles.setGroup.repsContainer}>
       <AddButton
-        onPress={() => props.onEditWeight({ index: props.index, cmd: "down" })}
         style={styles.setGroup.button}
         icon={icons.remove}
+        onPress={onReduceValue}
       />
       <View style={styles.setGroup.texts}>
         <CustomText text="Weight" style={styles.setGroup.label} />
-        <CustomText
-          text={props.item.weight}
-          style={styles.setGroup.labelItem}
-        />
+        <CustomText text={props.item.weight} style={styles.setGroup.labelItem} />
       </View>
       <AddButton
-        onPress={() => props.onEditWeight({ index: props.index, cmd: "up" })}
         style={styles.setGroup.button}
+        onPress={onIncreaseValue}
+      />
+      <QuickTipButton 
+      options={options}
+      callback={onSelectQuickTip}
       />
     </View>
   );
 };
 
 const Rest = ({ props }) => {
+  const options = [
+    { key: 0, value: 15 },
+    { key: 1, value: 30 },
+    { key: 2, value: 45 },
+    { key: 3, value: 60 },
+  ]
+
+  const onSelectQuickTip = (selected) => {
+    props.onEditRest({ index: props.index, value: selected.value })
+  }
+
+  const onReduceValue = () => {
+    if (props.item.sets == 0) return
+    const value = parseInt(props.item.rest)-1
+    props.onEditRest({ index: props.index, value })
+  }
+
+  const onIncreaseValue = () => {
+    const value = parseInt(props.item.rest)+1
+    props.onEditRest({ index: props.index, value })
+  }
+
   return (
-    <View style={{ ...styles.setGroup.repsContainer }}>
+    <View style={styles.setGroup.repsContainer}>
       <AddButton
         style={styles.setGroup.button}
         icon={icons.remove}
-        onPress={() => props.onEditRest({ index: props.index, cmd: "down" })}
+        onPress={onReduceValue}
       />
       <View style={styles.setGroup.texts}>
         <CustomText text="Rest" style={styles.setGroup.label} />
         <CustomText text={props.item.rest} style={styles.setGroup.labelItem} />
       </View>
       <AddButton
-        onPress={() => props.onEditRest({ index: props.index, cmd: "up" })}
         style={styles.setGroup.button}
+        onPress={onIncreaseValue}
+      />
+      <QuickTipButton 
+      options={options}
+      callback={onSelectQuickTip}
       />
     </View>
   );
 };
 
 const Reps = ({ props }) => {
+  const options = [
+    { key: 0, value: 6 },
+    { key: 1, value: 8 },
+    { key: 2, value: 10 },
+    { key: 3, value: 12 },
+    { key: 4, value: 15 },
+  ];
+
+  const onSelectQuickTip = (selected) => {
+    props.onEditSets({ index: props.index, value: selected.value })
+  }
+
+  const onReduceValue = () => {
+    if (props.item.sets == 0) return
+    const value = parseInt(props.item.sets)-1
+    props.onEditSets({ index: props.index, value })
+  }
+
+  const onIncreaseValue = () => {
+    const value = parseInt(props.item.sets)+1
+    props.onEditSets({ index: props.index, value })
+  }
+
   return (
     <View style={styles.setGroup.repsContainer}>
       <AddButton
         style={styles.setGroup.button}
         icon={icons.remove}
-        onPress={() => props.onEditSets({ index: props.index, cmd: "down" })}
+        onPress={onReduceValue}
       />
       <View style={styles.setGroup.texts}>
         <CustomText text="Reps" style={styles.setGroup.label} />
@@ -95,14 +169,17 @@ const Reps = ({ props }) => {
       </View>
       <AddButton
         style={styles.setGroup.button}
-        onPress={() => props.onEditSets({ index: props.index, cmd: "up" })}
+        onPress={onIncreaseValue}
       />
-      <QuickTipButton />
+      <QuickTipButton 
+      options={options}
+      callback={onSelectQuickTip}
+      />
     </View>
   );
 };
 
-const QuickTipButton = () => {
+const QuickTipButton = ({options, callback}) => {
   const quickTip = useContext(QuickTipContext);
   const [thisBtnPosition, setThisBtnPosition] = useState()
   const buttonRef = useRef();
@@ -118,6 +195,8 @@ const QuickTipButton = () => {
   }, []);
 
   const showQuickTip = ()=>{
+    quickTip.setCallback({f: callback})
+    quickTip.setOptionList(options)
     quickTip.setBtnPosition(thisBtnPosition);
     quickTip.setShow(prev => !prev);
   }
@@ -126,8 +205,8 @@ const QuickTipButton = () => {
     <View ref={buttonRef}>
       <AddButton
         icon={icons.bolt}
-        iconStyle={{ width: 20, height: 20 }}
-        style={styles.setGroup.button}
+        iconStyle={{ width: 20, height: 20, tintColor: "white" }}
+        style={styles.setGroup.quickTipButton}
         onPress={showQuickTip}
       />
     </View>
@@ -166,7 +245,7 @@ const itemGroup = (props) => {
 };
 
 const ExercisesSets = ({ navigation, route }) => {
-  const { exercise, routine, index } = route.params;
+  const { exercise, routine, index, removeExercise } = route.params;
   const [viewMode, setViewMode] = useState(0);
   const setModel = [
     {
@@ -198,7 +277,6 @@ const ExercisesSets = ({ navigation, route }) => {
     }
   }, [exercise]);
 
-  console.log;
 
   const handleOnSaveSets = () => {
     if (!exerciseData) return;
@@ -238,7 +316,8 @@ const ExercisesSets = ({ navigation, route }) => {
   const handleAddNewSet = () => {
     setExerciseData((prev) => {
       if (exerciseData && exerciseData.length != 0) {
-        return [...prev, prev[exerciseData.length - 1]];
+        const newSet = JSON.parse(JSON.stringify(prev[exerciseData.length - 1]))
+        return [...prev, newSet];
       } else {
         return setModel;
       }
@@ -264,12 +343,7 @@ const ExercisesSets = ({ navigation, route }) => {
   const onEditSets = (set) => {
     setExerciseData((prev) => {
       const newSetList = [...prev];
-      newSetList[set.index].sets =
-        set.cmd == "up"
-          ? parseInt(newSetList[set.index].sets) + 1
-          : parseInt(newSetList[set.index].sets) != 0
-          ? parseInt(newSetList[set.index].sets) - 1
-          : 0;
+      newSetList[set.index].sets = set.value
       return newSetList;
     });
   };
@@ -277,12 +351,7 @@ const ExercisesSets = ({ navigation, route }) => {
   const onEditRest = (rest) => {
     setExerciseData((prev) => {
       const newSetList = [...prev];
-      newSetList[rest.index].rest =
-        rest.cmd == "up"
-          ? parseInt(newSetList[rest.index].rest) + 1
-          : parseInt(newSetList[rest.index].rest) != 0
-          ? parseInt(newSetList[rest.index].rest) - 1
-          : 0;
+      newSetList[rest.index].rest = rest.value
       return newSetList;
     });
   };
@@ -290,16 +359,15 @@ const ExercisesSets = ({ navigation, route }) => {
   const onEditWeight = (weight) => {
     setExerciseData((prev) => {
       const newSetList = [...prev];
-      newSetList[weight.index].weight =
-        weight.cmd == "up"
-          ? parseFloat(newSetList[weight.index].weight) + 0.25
-          : parseFloat(newSetList[weight.index].weight) != 0
-          ? parseFloat(newSetList[weight.index].weight) - 0.25
-          : 0;
+      newSetList[weight.index].weight = weight.value
       return newSetList;
     });
   };
-
+  
+  const handleOnRemoveExercise = ()=> {
+    removeExercise()
+    navigation.goBack()
+  }
   return (
     
       <Pressable style={styles.container}>
@@ -383,7 +451,7 @@ const ExercisesSets = ({ navigation, route }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.removeButton}
-            onPress={() => console.log("remove exercise")}
+            onPress={handleOnRemoveExercise}
           >
             <Image source={icons.garbage} style={styles.newSetIcon} />
             <CustomText

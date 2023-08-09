@@ -107,6 +107,11 @@ export default styles = StyleSheet.create({
       width: 25,
       height: 25,
     },
+    quickTipButton: {
+      width: 30,
+      height: 30,
+      backgroundColor: colors.background.primary,
+    },
     exerciseNotes:{
       width: "70%",
       height: 50,

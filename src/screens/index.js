@@ -11,3 +11,4 @@ export { default as Routines} from "./Routines/index"
 export { default as Workout} from "./Workout/index"
 export { default as ExerciseSets} from "./Exercise.Sets/index"
 
+export { default as Auth} from "./Auth"

@@ -11,7 +11,7 @@ import colors from "../../theme/colors";
 import { icons } from "../../theme/icons";
 import CustomText from "../CustomText";
 
-const InputTextLabeled = ({ label, error, Button, onChangeText, containerBackgroundColor, value="", style }) => {
+const InputTextLabeled = ({ label, error, Button, onChangeText, containerBackgroundColor, value="", style, isPassword=false }) => {
   const [textInputValue, setTextInputValue] = useState("")
 
   const styles = StyleSheet.create({
@@ -91,6 +91,7 @@ const InputTextLabeled = ({ label, error, Button, onChangeText, containerBackgro
           style={styles.field}
           value={textInputValue}
           onChangeText={handleOnTextInputChange}
+          secureTextEntry={isPassword} 
         />
         {/* {error ? <Image style={styles.icon} source={icons.error}/> : <Image style={styles.icon} source={icons.search}/>} */}
         {Button ? <Button /> : textInputValue.length>0 ? <ClearButton/> : <></>}
