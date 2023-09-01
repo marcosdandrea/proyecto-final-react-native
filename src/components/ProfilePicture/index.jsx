@@ -4,17 +4,29 @@ import { images } from "../../theme/images";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CustomText from "../CustomText";
 
-const ProfilePicture = ({onChagePicture, profilePicture}) => {
+const ProfilePicture = ({
+  style,
+  onChagePicture,
+  profilePicture,
+  showChangeText = true,
+}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.profileContainer}>
-        <Image style={styles.profilePic} source={{uri: profilePicture}} />
-      </View>
+    <View style={{ ...styles.container, ...style }}>
       <TouchableOpacity onPress={onChagePicture}>
-        <CustomText
-          text={"Change Profile Picture"}
-          style={styles.changeProfilePictureText}
-        />
+        <View style={{ ...styles.profileContainer }}>
+          <Image
+            style={styles.profilePic}
+            source={profilePicture ? { uri: profilePicture } : images.avatar}
+          />
+        </View>
+        {showChangeText ? (
+          <CustomText
+            text={"Change Profile Picture"}
+            style={styles.changeProfilePictureText}
+          />
+        ) : (
+          <></>
+        )}
       </TouchableOpacity>
     </View>
   );

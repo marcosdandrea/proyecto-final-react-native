@@ -26,4 +26,12 @@ export const icons = {
     bolt: require("./bolt.png"),
     login: require("./login.png"),
     register: require("./register.png"),
+    play: require("./play.png"),
+    stop: require("./stop.png"),
+    video: require("./video.png"),
+    info: require("./info.png"),
+    minus: require("./minus.png"),
+    plus: require("./plus.png"),
+    trophy: require("./trophy.png"),
+    expand: require("./expand.png"),
 }

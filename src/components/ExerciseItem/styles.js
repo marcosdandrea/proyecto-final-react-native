@@ -8,6 +8,7 @@ export default styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     height: 75,
+    position: "relative"
   },
   categoryContainer: {
     position: "absolute",
@@ -40,7 +41,26 @@ export default styles = StyleSheet.create({
     height: 3,
     width: "105%",
     position: "absolute",
-    bottom: -5,
+    bottom: 0,
     backgroundColor: colors.foreground.terciary,
   },
+  pullIconLeft:{
+    height: 15,
+    width: 15,
+    tintColor: colors.foreground.informative,
+    transform: [{rotate: "-90deg"}],
+    position: "absolute",
+    left: 0,
+    top: 29,
+    opacity: 0.5
+  },
+    pullIconRight:{
+    height: 15,
+    width: 15,
+    tintColor: colors.background.disabled,
+    transform: [{rotate: "90deg"}],
+    position: "absolute",
+    right: 0,
+    top: 29
+  }
 });

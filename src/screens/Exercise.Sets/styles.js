@@ -33,8 +33,10 @@ export default styles = StyleSheet.create({
     textAlign: "center",
   },
   list: {
+    flex: 1,
     marginTop: 15,
     width: "100%",
+    height: 400,
     marginBottom: 5,
   },
   listContainer: {

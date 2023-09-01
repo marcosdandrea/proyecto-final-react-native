@@ -11,10 +11,10 @@ export const userApi = createApi({
   endpoints: (builder) => ({
 
     setUserData: builder.mutation({
-      query: ({userID, name, mail, profilePic}) => ({
+      query: ({userID, data}) => ({
         url: `users/${userID}.json`,
-        method: 'POST',
-        body: {name, mail, profilePic},
+        method: 'PUT',
+        body: {...data},
       }),
       invalidatesTags: ['user'],
     }),
@@ -29,14 +29,14 @@ export const userApi = createApi({
     }),
 
     updateUserData: builder.mutation({
-      query: ({userID, firebaseID, name, mail, profilePic}) => {
-        console.log (`/users/${userID}/${firebaseID}.json`)
-        return({
-          url: `/users/${userID}/${firebaseID}.json`,
-          method: 'PUT',
-          body: {name, mail, profilePic},
+      query: ({userID, data}) => 
+      {
+      return({
+          url: `/users/${userID}.json`,
+          method: 'PATCH',
+          body: {...data},
       })},
-      providesTags: ['user'],
+      invalidatesTags: ['user'],
   })
 
   }),

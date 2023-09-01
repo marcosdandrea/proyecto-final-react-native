@@ -12,8 +12,8 @@ export default COLORS = {
   background: {
     primary: "#131314",
     secondary: "#273031",
-    terciary: "#263032",
-    disabled: "#5f5f5f",
+    terciary: "#505454",
+    disabled: "#707070",
     backdrop: "#c3c3c3",
     container: "#fefefe",
   },

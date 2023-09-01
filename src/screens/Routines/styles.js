@@ -9,6 +9,7 @@ export default styles = StyleSheet.create({
     backgroundColor: colors.background.primary,
     paddingTop: 10,
     justifyContent: "center",
+    position: "relative"
   },
   routineMainContianer: {
     flex: 1,
@@ -57,5 +58,17 @@ export default styles = StyleSheet.create({
   deleteIconContainer: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  noRoutinesContainer: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 50
+  },
+  noRoutineText:{
+    color: colors.foreground.white,
+    textAlign: "center"
   }
 });

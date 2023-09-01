@@ -10,10 +10,8 @@ import colors from "../../theme/colors";
 import { useState, useEffect } from "react";
 import { ExerciseItem, Filters } from "../../components";
 import PullToAction from "../../components/PullToAction";
-import { useDispatch } from "react-redux";
 import styles from "./styles";
 import { icons } from "../../theme/icons";
-import { removeExercise } from "../../store/exercises/exercises.slice";
 import {
   useGetCategoriesQuery,
   useGetExercisesQuery,
@@ -22,26 +20,17 @@ import {
 
 
 const Exercises = ({ navigation }) => {
-  const dispatch = useDispatch();
   const {
     data: exerciseData,
     refetch: getExercisesData,
-    isError: exerciseError,
-    isLoading: exerciseIsLoading,
-    isFetching: exerciseIsFetching,
     isSuccess: exerciseIsSuccess,
   } = useGetExercisesQuery();
   const {
     data: categoryData,
-    isError: categoryError,
-    isLoading: categoryIsLoading,
     isSuccess: categoryIsSuccess,
   } = useGetCategoriesQuery();
 
-  const [deleteExercise, { error: deleteExerciseError }] =
-    useRemoveExerciseMutation();
-  //const exerciseData = useSelector((state)=> state.exercises.items)
-  //const categoryData = useSelector((state)=> state.exercises.categories)
+  const [deleteExercise] = useRemoveExerciseMutation();
 
   const screenWidth = Dimensions.get("window").width;
   const [exercises, setExercises] = useState();
@@ -65,12 +54,16 @@ const Exercises = ({ navigation }) => {
       return exercise;
     });
     setExercises(allExercises);
-  }, [exerciseIsSuccess, categoryIsSuccess]);
+  }, [exerciseIsSuccess, categoryIsSuccess, exerciseData]);
 
   useEffect(
     () => setFilteredExercises(runAllFilters(exercises)),
     [exercises, filterByName, filterByCategory]
   );
+
+  function normalize(text) {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
 
   const runAllFilters = (exercisesToFilter) => {
     if (!exercises) return;
@@ -90,9 +83,9 @@ const Exercises = ({ navigation }) => {
 
   const runFilterByName = (exercisesToFilter) => {
     return [...exercisesToFilter].filter((ex) => {
-      const exerciseName = ex.name.toLowerCase();
+      const exerciseName = normalize(ex.name.toLowerCase())
       const filter = filterByName.toLowerCase();
-      return exerciseName.indexOf(filter) > -1;
+      return normalize(exerciseName).indexOf(filter) > -1;
     });
   };
 
@@ -110,7 +103,6 @@ const Exercises = ({ navigation }) => {
           text: "OK",
           onPress: () => {
             try {
-              console.log(exercise.key);
               deleteExercise({key: exercise.key});
               //dispatch(removeExercise(exercise));
             } catch (e) {

@@ -6,6 +6,7 @@ import DeleteExercise from "../../components/DeleteExerciseButton";
 import { colors } from "../../theme";
 import { icons } from "../../theme/icons";
 import ExercisesSets from "../../screens/Exercise.Sets";
+import RoutineEdit from "../../screens/Routine.Edit";
 
 const StackNavigator = createNativeStackNavigator();
 
@@ -23,18 +24,20 @@ const BackButton = ({ route, navigation }) => {
   );
 };
 
+
+
 const RoutineNavigator = () => {
   return (
     <StackNavigator.Navigator initialRouteName="Routines">
       <StackNavigator.Screen
         name="Routines"
-        options={{
+        options={({ navigation, route }) => ({
           header: () => (
             <Header title={"Routines"}>
-              <AddButton />
+              <AddButton onPress={()=>navigation.navigate("Routine Editor")}/>
             </Header>
           ),
-        }}
+        })}
         component={Routines}
       />
 
@@ -69,7 +72,19 @@ const RoutineNavigator = () => {
         component={ExercisesSets}
       />
 
+      <StackNavigator.Screen
+        name="Routine Editor"
+        options={{
+          animation: "fade",
+          animationTypeForReplace: "pop",
+          presentation: "transparentModal",
+          headerShown: false,
+        }}
+        component={RoutineEdit}
+      />
     </StackNavigator.Navigator>
+
+    
   );
 };
 

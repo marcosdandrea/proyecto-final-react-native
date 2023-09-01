@@ -1,12 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { URL_BASE_FIREBASE_REALTIME_DATABASE } from "../../constants/firebase";
 
+
 export const routinesAPI = createApi({
   reducerPath: "routinesAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: URL_BASE_FIREBASE_REALTIME_DATABASE,
   }),
-  tagTypes: ["routines"],
+  tagTypes: ["routine", "routines"],
 
   endpoints: (builder) => ({
     getAllRoutines: builder.query({
@@ -16,19 +17,29 @@ export const routinesAPI = createApi({
 
     getSingleRoutine: builder.query({
       query: ({ key }) => `/routines/${key}.json`,
-      providesTags: ["routines"],
+      providesTags: ["routine"],
+    }),
+
+    deleteRoutine: builder.mutation({
+      query: ({ key }) => {
+        return {
+          url: `/routines/${key}.json`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["routines", "routine"],
     }),
 
     saveRoutine: builder.mutation({
       query: ({ routine, key }) => {
-        //console.log (key)
-        //console.log (JSON.stringify(routine))
         return {
           url: `/routines/${key}.json`,
           method: "PATCH",
           body: routine,
-        };
+        }
       },
+      invalidatesTags: ["routines", "routine"],
+
       async onQueryStarted({ routine, key }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           routinesAPI.util.updateQueryData(
@@ -55,7 +66,7 @@ export const routinesAPI = createApi({
           body: exercise,
         };
       },
-      invalidatesTags: ["routines"],
+      invalidatesTags: ["routines", "routine"],
     }),
 
     addExerciseToRoutine: builder.mutation({
@@ -66,18 +77,17 @@ export const routinesAPI = createApi({
           body: exercise,
         };
       },
-      invalidatesTags: ["routines"],
+      invalidatesTags: ["routines", "routine"],
     }),
 
     removeExerciseFromRoutine: builder.mutation({
       query: ({ exerciseIndex, routineID }) => {
-        console.log (exerciseIndex, routineID);
         return {
           url: `/routines/${routineID}/exercises/${exerciseIndex}.json`,
           method: "DELETE",
         };
       },
-      invalidatesTags: ["routines"],
+      invalidatesTags: ["routines", "routine"],
     }),
 
   }),
@@ -87,6 +97,7 @@ export const {
   useGetAllRoutinesQuery,
   useGetSingleRoutineQuery,
   useSaveRoutineMutation,
+  useDeleteRoutineMutation,
   usePatchRoutineExerciseMutation,
   useAddExerciseToRoutineMutation,
   useRemoveExerciseFromRoutineMutation,

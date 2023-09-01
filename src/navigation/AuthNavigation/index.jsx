@@ -6,7 +6,12 @@ const StackNavigator = createNativeStackNavigator()
 const AuthNavigator = () => {
     return (
         <StackNavigator.Navigator initialRouteName="Profile">
-            <StackNavigator.Screen name="Profile" component={Auth}/>
+            <StackNavigator.Screen 
+                name="Profile" 
+                component={Auth}
+                options={{
+                    headerShown: false
+                }}/>
         </StackNavigator.Navigator>
     )
 }

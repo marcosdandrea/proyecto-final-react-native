@@ -1,14 +1,10 @@
 import { View, Text, Button, TouchableOpacity } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import Toast from "react-native-root-toast";
 import { InputTextLabeled, StandarIconButton } from "../../components";
 import colors from "../../theme/colors";
 import { styles } from "./styles";
-import {
-  addExercise,
-  saveExercise,
-} from "../../store/exercises/exercises.slice";
 import { icons } from "../../theme/icons";
 import {
   useAddNewExercisesMutation,
@@ -18,32 +14,27 @@ import {
 } from "../../store/exercises/exercises.API";
 
 const EditExercise = ({ navigation, route }) => {
-  //const dispatch = useDispatch();
-
   const { exercise } = route.params || { exercise: undefined };
-  const { data: _categories, isLoading: loadingCategories } =
-    useGetCategoriesQuery();
-  const [
-    createExercise,
-    { data: creatingExerciseData, isLoading: isLoadingAddNewExercise },
-  ] = useAddNewExercisesMutation();
-  const [
-    saveExercise,
-    { data: savingExerciseData, isLoading: isLoadingSaveExercise },
-  ] = useSaveExercisesMutation();
+  const { data: _categories } = useGetCategoriesQuery();
+  const [createExercise] = useAddNewExercisesMutation();
+  const [saveExercise] = useSaveExercisesMutation();
   const { data: exercises, isLoading: loadingExercises } =
     useGetExercisesQuery();
 
-  //const _categories = useSelector((state) => state.exercises.categories);
   const [categories, setCategories] = useState([]);
-
   const [exerciseName, setExerciseName] = useState(
-    exercises[exercise.key].name
+    exercises[exercise.key]?.name || ""
   );
   const [exerciseCategory, setExerciseCategory] = useState();
-  const [exerciseDescription, setExerciseDescription] = useState(exercises[exercise.key].description);
-  const [exerciseUnit, setExerciseUnit] = useState(exercises[exercise.key].unit);
-  const [exerciseIncrement, setExerciseIncrement] = useState(exercises[exercise.key].increment);
+  const [exerciseDescription, setExerciseDescription] = useState(
+    exercises[exercise.key]?.description || ""
+  );
+  const [exerciseUnit, setExerciseUnit] = useState(
+    exercises[exercise.key]?.unit || ""
+  );
+  const [exerciseIncrement, setExerciseIncrement] = useState(
+    exercises[exercise.key]?.increment || ""
+  );
 
   useEffect(() => {
     const newCategories = Object.keys(_categories).map((key) => {
@@ -53,14 +44,16 @@ const EditExercise = ({ navigation, route }) => {
   }, [_categories]);
 
   useEffect(() => {
-    if (loadingExercises) return
+    if (loadingExercises) return;
     if (
       Object.keys(categories).length == 0 ||
       Object.keys(exercise).length == 0
     )
       return;
     setExerciseCategory(
-      categories.find((category) => category.key == exercises[exercise.key].category)
+      categories.find(
+        (category) => category.key == exercises[exercise.key].category
+      )
     );
   }, [exercises, exercise, categories]);
 
@@ -68,25 +61,21 @@ const EditExercise = ({ navigation, route }) => {
     const data = {
       name: exerciseName,
       description: exerciseDescription,
-      category: exerciseCategory,
+      category: exerciseCategory.key,
       unit: exerciseUnit,
       increment: exerciseIncrement,
-      //key: exercise.key || 0,
     };
     try {
       exercise.key
         ? await saveExercise({ data, key: exercise.key })
         : await createExercise({ data });
+      Toast.show("Exercise saved", {
+        duration: Toast.durations.SHORT,
+      });
       navigation.goBack();
     } catch (e) {
       console.warn(e);
     }
-
-    /*
-    exercise.key 
-      ? dispatch(saveExercise(data)) 
-      : dispatch(addExercise(data))
-    */
   };
 
   return (

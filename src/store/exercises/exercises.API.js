@@ -13,6 +13,10 @@ export const exercisesAPI = createApi({
       query: () => "/exercises/items.json",
       providesTags: ["exercises"],
     }),
+    getExercisesById: builder.query({
+      query: ({id}) => `/exercises/items/${id}.json`,
+      providesTags: ["exercises"],
+    }),
     getCategories: builder.query({
       query: () => "/exercises/categories.json",
     }),
@@ -44,6 +48,7 @@ export const exercisesAPI = createApi({
 
 export const {
   useGetExercisesQuery,
+  useGetExercisesByIdQuery,
   useGetCategoriesQuery,
   useSaveExercisesMutation,
   useAddNewExercisesMutation,

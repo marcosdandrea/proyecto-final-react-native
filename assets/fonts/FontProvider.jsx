@@ -5,7 +5,8 @@ const Fonts = {
     Regular: "Poppins-Regular",
     Medium: "Poppins-Medium",
     Bold: "Poppins-Bold",
-    Light: "Poppins-Light"
+    Light: "Poppins-Light",
+    LCD: "LCD"
 }
 
 export const FontProvider = ({ children }) => {
@@ -14,6 +15,7 @@ export const FontProvider = ({ children }) => {
     [Fonts.Medium] : require("./ttf/Poppins-Medium.ttf"),
     [Fonts.Bold] : require("./ttf/Poppins-SemiBold.ttf"),
     [Fonts.Light] : require("./ttf/Poppins-Light.ttf"),
+    [Fonts.LCD]: require("./ttf/LCD2U.ttf"),
   });
 
   if (!fontsLoaded) {

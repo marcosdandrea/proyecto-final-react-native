@@ -12,9 +12,8 @@ import {
 } from "../../store/exercises/exercises.API";
 import { colors } from "../../theme";
 import { icons } from "../../theme/icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { useSaveRoutineMutation } from "../../store/routines/routines.API";
 
 const ExerciseItem = ({ item, onEditExercise, onSelectExercise }) => {
   return (
@@ -50,22 +49,16 @@ const ExerciseItem = ({ item, onEditExercise, onSelectExercise }) => {
 const ExercisesExplorer = ({navigation, route}) => {
 
   const {routine} = route.params
-
+  const [addedExercises, setAddedExercises] = useState(0)
   const {
     data: exerciseData,
-    refetch: getExercisesData,
-    error: exerciseError,
     isLoading: exerciseIsLoading,
-    isFetching: exerciseIsFetching,
   } = useGetExercisesQuery();
 
   const {
     data: categoryData,
-    error: categoryError,
     isLoading: categoryIsLoading,
   } = useGetCategoriesQuery();
-
-  const [saveRoutine, { isLoading }] = useSaveRoutineMutation()
 
   //filters
   const [filterByName, setFilterByName] = useState("");
@@ -120,11 +113,12 @@ const ExercisesExplorer = ({navigation, route}) => {
   };
 
   const onEditExercise = (exercise) => {
+    console.log ("Editing exercise " + exercise)
     navigation.navigate("Edit Exercise", {exercise});
   }
 
   const onSelectExercise = (exercise) => {
-    navigation.navigate("Exercises Sets", {exercise, routine});
+    navigation.navigate("Exercises Sets", {exercise, routine, index: routine.exercises.length, addedExercises, setAddedExercises}); //
   };
 
   return (
@@ -138,7 +132,7 @@ const ExercisesExplorer = ({navigation, route}) => {
           <Filters
             onPress={(selected) => setFilterByCategory(selected)}
             filterList={categoryData}
-            selected={(item) => console.log(item)}
+            selected={filterByCategory}
           />
 
           <View style={styles.inputFilterContainer}>

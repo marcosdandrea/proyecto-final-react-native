@@ -25,9 +25,9 @@ const ExerciseItemForRoutine = ({ item, drag, navigation, onPress }) => {
           <View style={styles.bodyContainer}>
             <CustomText text={item.name} style={styles.exerciseName} />
             <View style={styles.setContainer}>
-              <CustomText text={"Sets:"} style={styles.text} />
+              <CustomText text={`${item.sets.length} sets:`} style={styles.text} />
               {item.sets.map((set, index) => (
-                <CustomText key={index} text={set} style={styles.text} />
+                <CustomText key={index} text={`${set}x${item.weight[index]}`} style={styles.text} />
               ))}
             </View>
           </View>

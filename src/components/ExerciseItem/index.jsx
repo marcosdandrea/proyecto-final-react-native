@@ -1,8 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../theme";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import CustomText from "../CustomText";
 import styles from "./styles";
+import { icons } from "../../theme/icons";
 
 const MainComponent = ({ item, width }) => {
   return (
@@ -12,6 +13,9 @@ const MainComponent = ({ item, width }) => {
       end={{ x: 1.5, y: 0 }}
       style={{ ...styles.container, width }}
     >
+      <Image source={icons.expand} style={styles.pullIconLeft}/>
+      <Image source={icons.expand} style={styles.pullIconRight}/>
+
       <View style={styles.mainBody}>
         <View style={{
             ...styles.categoryContainer,

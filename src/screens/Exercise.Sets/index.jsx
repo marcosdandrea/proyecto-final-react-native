@@ -4,7 +4,9 @@ import {
   Pressable,
   Text,
   TextInput,
+  Touchable,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import styles from "./styles";
@@ -17,11 +19,7 @@ import {
 import { icons } from "../../theme/icons";
 import { colors } from "../../theme";
 import { useContext, useEffect, useRef, useState } from "react";
-import {
-  useAddExerciseToRoutineMutation,
-  usePatchRoutineExerciseMutation,
-} from "../../store/routines/routines.API";
-import { useGetExercisesQuery } from "../../store/exercises/exercises.API";
+import { usePatchRoutineExerciseMutation } from "../../store/routines/routines.API";
 import { QuickTipContext } from "../../components/CustomQuickTip";
 
 const Notes = ({ props }) => {
@@ -187,6 +185,7 @@ const QuickTipButton = ({options, callback}) => {
   useEffect(() => {
     setTimeout(() => {
       const button = buttonRef.current;
+      if (!button) return
       button.measure((fx, fy, width, height, px, py) => {
         if (px !== null) 
         setThisBtnPosition({ x: px + 15, y: py + 30});
@@ -227,7 +226,9 @@ const SelectiveItemList = ({ props }) => {
 
 const itemGroup = (props) => {
   return (
+    <TouchableWithoutFeedback>
     <View style={styles.setGroup.container}>
+
       <View style={styles.setGroup.setLabelContainer}>
         <CustomText style={styles.setGroup.setLabel} text={props.index + 1} />
       </View>
@@ -240,27 +241,27 @@ const itemGroup = (props) => {
       >
         <Image source={icons.delete} style={styles.deleteIcon} />
       </TouchableOpacity>
+
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const ExercisesSets = ({ navigation, route }) => {
-  const { exercise, routine, index, removeExercise } = route.params;
+  const { exercise, routine, index, handleRemoveExerciseFromRoutine, addedExercises=0, setAddedExercises } = route.params;
   const [viewMode, setViewMode] = useState(0);
   const setModel = [
     {
-      rest: [0],
-      sets: [0],
-      weight: [0],
-      notes: [""],
+      rest: 0,
+      sets: 0,
+      weight: 0,
+      notes: "",
       exerciseID: exercise.exerciseID || exercise.key,
     },
   ];
   const [exerciseData, setExerciseData] = useState(setModel);
 
-  const [triggerPatchRoutine, {}] = usePatchRoutineExerciseMutation();
-
-  const [addExerciseToRoutine, {}] = useAddExerciseToRoutineMutation();
+  const [triggerPatchRoutine] = usePatchRoutineExerciseMutation();
 
   useEffect(() => {
     if (exercise.sets) {
@@ -276,7 +277,6 @@ const ExercisesSets = ({ navigation, route }) => {
       setExerciseData(_exerciseData);
     }
   }, [exercise]);
-
 
   const handleOnSaveSets = () => {
     if (!exerciseData) return;
@@ -302,8 +302,9 @@ const ExercisesSets = ({ navigation, route }) => {
       triggerPatchRoutine({
         exercise: parsedExercises,
         routineID: routine.key,
-        index: index || routine.exercises.length,
-      });
+        index: index + addedExercises,
+      })
+      if (setAddedExercises) setAddedExercises(prev => prev +1)
     } catch (err) {
       console.warn(err);
     }
@@ -365,7 +366,7 @@ const ExercisesSets = ({ navigation, route }) => {
   };
   
   const handleOnRemoveExercise = ()=> {
-    removeExercise()
+    handleRemoveExerciseFromRoutine({index})
     navigation.goBack()
   }
   return (
@@ -444,8 +445,7 @@ const ExercisesSets = ({ navigation, route }) => {
 
           <TouchableOpacity
             style={styles.newSetButton}
-            onPress={handleAddNewSet}
-          >
+            onPress={handleAddNewSet}>
             <Image source={icons.add} style={styles.newSetIcon} />
             <CustomText text="Add new set" style={styles.newSetButtonText} />
           </TouchableOpacity>

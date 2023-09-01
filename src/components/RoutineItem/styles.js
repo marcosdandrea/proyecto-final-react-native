@@ -16,11 +16,14 @@ export default styles = StyleSheet.create({
     },
     mainContainer:{
       flex: 1,
-      flexDirection: "column"
+      flexDirection: "column",
+      position: "relative",
     },
     nameContainer: {
       flexDirection: "row",
-      justifyContent: "space-between",
+      alignContent: "center",
+      justifyContent: "flex-start",
+      columnGap: 15
     },
     name: {
       fontFamily: Fonts.Medium,
@@ -35,4 +38,9 @@ export default styles = StyleSheet.create({
       paddingLeft: 15,
       textTransform: "uppercase",
     },
+    editIcon: {
+      height: 21,
+      width: 21,
+      tintColor: colors.foreground.white
+    }
   });

@@ -2,7 +2,7 @@ import { View, Image } from "react-native";
 import colors from "../../theme/colors";
 import { icons } from "../../theme/icons";
 
-const MainButtonTab = ({ focused, size, tabBarColor }) => {
+const MainButtonTab = ({ focused, size, workingOut }) => {
   return (
     <View
       style={{
@@ -29,7 +29,7 @@ const MainButtonTab = ({ focused, size, tabBarColor }) => {
           width: size,
           height: size,
           borderRadius: size/2,
-          backgroundColor: focused
+          backgroundColor: workingOut
             ? colors.foreground.secondary
             : colors.background.disabled,
           zIndex: -1,

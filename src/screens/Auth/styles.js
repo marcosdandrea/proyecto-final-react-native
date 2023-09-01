@@ -14,25 +14,17 @@ export default styles = StyleSheet.create({
   },
   mainContainer:{
     width: windowWidth *.8,
-    height: windowHeight *.5,
+    //height: windowHeight *.5,
     marginTop: windowHeight/2 - (windowHeight * .5 /2),
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: colors.background.terciary,
     borderRadius: 5,
     padding: 15,
-    paddingVertical: 65,
+    paddingVertical: 55,
     zIndex: 2,
     position: "absolute",
-  },
-  textDecoration:{
-    fontFamily: Fonts.Bold,
-    fontSize: 80,
-    color: colors.foreground.white,
-    textTransform: "uppercase",
-    zIndex: 200,
-    position: "absolute",
-    marginTop: -60
+    rowGap: 15
   },
   header:{
     width: "100%",
@@ -42,9 +34,14 @@ export default styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
   },
+  mainTitle:{
+    fontSize: 28,
+    color: colors.foreground.informative,
+    fontFamily: Fonts.Bold
+  },
   headerText:{
-    fontFamily: Fonts.Bold,
-    fontSize: 20,
+    fontFamily: Fonts.Light,
+    fontSize: 15,
     color: colors.foreground.white,
   },
   body:{

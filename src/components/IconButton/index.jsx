@@ -9,6 +9,8 @@ const IconButton = ({
   iconStyle,
   iconTintColor = colors.foreground.white,
   size = 20,
+  buttonProps = {},
+  disabled = false
 }) => {
   const styles = {
     image: {
@@ -19,6 +21,7 @@ const IconButton = ({
 
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={onPress}
       style={{
         width: size + 20,
@@ -27,6 +30,7 @@ const IconButton = ({
         borderRadius,
         justifyContent: "center",
         alignItems: "center",
+        ...buttonProps
       }}
     >
       <Image style={{...styles.image, ...iconStyle}} tintColor={iconTintColor} source={icon} />

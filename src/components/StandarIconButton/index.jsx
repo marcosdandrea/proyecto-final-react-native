@@ -3,9 +3,9 @@ import styles from "./styles";
 import { icons } from "../../theme/icons";
 import { colors } from "../../theme";
 
-const StandarIconButton = ({ icon = icons.delete, iconTint=colors.foreground.white, text = "", buttonProperties, textProperties, onPress }) => {
+const StandarIconButton = ({ icon = icons.delete, iconTint=colors.foreground.white, text = "", buttonProperties, textProperties, onPress, enabled=true }) => {
   return (
-    <TouchableOpacity style={{...styles.container, ...buttonProperties}} onPress={onPress}>
+    <TouchableOpacity disabled={!enabled} style={{...styles.container, ...buttonProperties}} onPress={onPress}>
       <Image source={icon} style={{...styles.icon, tintColor: iconTint}} />
       <Text style={{...styles.text, ...textProperties}}>{text}</Text>
     </TouchableOpacity>

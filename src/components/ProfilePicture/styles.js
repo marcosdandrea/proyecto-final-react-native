@@ -1,21 +1,19 @@
 import { StyleSheet } from "react-native";
 import { Fonts } from "../../../assets/fonts/FontProvider";
+import { colors } from "../../theme";
 
 const styles = StyleSheet.create({
     container:{
         width: 200,
-        height: 200,
+        aspectRatio: 0.8,
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        rowGap: 15
+        rowGap: 15,
     },
     profileContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 2,
-    borderColor: "#000000",
+    width: "100%",
+    aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center"
   },
@@ -25,8 +23,10 @@ const styles = StyleSheet.create({
     borderRadius: 220
   },
   changeProfilePictureText:{
+    textAlign: "center",
     fontFamily: Fonts.Bold,
-    color: "blue",
+    color: colors.foreground.white,
+    textDecorationLine: "underline"
   }
 });
 

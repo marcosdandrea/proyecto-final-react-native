@@ -14,6 +14,7 @@ export default styles = StyleSheet.create({
   },
   bodyContainer: {
     paddingVertical: 15,
+    height: "100%",
   },
   inputFilterContainer: {
     paddingVertical: 20,
@@ -21,6 +22,9 @@ export default styles = StyleSheet.create({
   },
   text: {
     color: "white",
+  },
+  exerciseList:{
+    height: "100%",
   },
   exerciseListContainer: {
     gap: 5,

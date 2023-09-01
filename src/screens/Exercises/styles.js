@@ -7,11 +7,12 @@ const styles = StyleSheet.create({
       backgroundColor: colors.background.primary,
       paddingTop: 15,
     },
-    exerciseList: {},
+    exerciseList: {
+    },
     exerciseListContainer: {
       paddingHorizontal: 15,
       rowGap: 8,
-      paddingBottom: 8,
+      paddingBottom: 150,
     },
     inputFilterContainer:{
       paddingHorizontal: 15,

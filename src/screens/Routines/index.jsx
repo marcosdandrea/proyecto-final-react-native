@@ -2,6 +2,7 @@ import { View, FlatList, Dimensions, ActivityIndicator } from "react-native";
 import colors from "../../theme/colors";
 import { useEffect, useRef, useState } from "react";
 import { icons } from "../../theme/icons";
+import styles from "./styles";
 import {
   InputTextLabeled,
   IconButton,
@@ -10,67 +11,70 @@ import {
   ExerciseItemForRoutine,
   CustomText,
 } from "../../components";
-import styles from "./styles";
-import { useSelector } from "react-redux";
 import {
   useGetAllRoutinesQuery,
-  useGetRoutinesQuery,
-  useRemoveExerciseFromRoutineMutation,
   useSaveRoutineMutation,
 } from "../../store/routines/routines.API";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { useGetExercisesQuery } from "../../store/exercises/exercises.API";
+import { useDispatch, useSelector } from "react-redux";
+import { setWorkout } from "../../store/workout/workout.slice";
+import StartWorkout from "../../components/StartWorkout";
 
 const Routines = ({ navigation }) => {
-  //const _routines = useSelector((state)=> state.routines)
-  //const _exercises = useSelector((state) => state.exercises);
+  const dispatch = useDispatch();
+  const workout = useSelector((state) => state.workout.workout);
 
+  //RTK
   const {
     data: _routines,
-    error: getRoutinesError,
     isLoading: routinesIsLoading,
+    isError: fetchingRoutineError,
   } = useGetAllRoutinesQuery();
+  const { data: _exercises, isError: fetchingExercisesError } =
+    useGetExercisesQuery();
+  const [saveRoutine] = useSaveRoutineMutation();
+  /////
 
-  const {
-    data: _exercises,
-    refetch: getExercisesData,
-    error: exerciseError,
-    isLoading: exerciseIsLoading,
-    isFetching: exerciseIsFetching,
-  } = useGetExercisesQuery();
-
-  const [saveRoutine, { isError, isSuccess, isLoading }] =
-    useSaveRoutineMutation();
-
-  const [removeExercise] = useRemoveExerciseFromRoutineMutation()
-
-  const [currentExerciseList, setCurrentExerciseList] = useState([]);
   const [routines, setRoutines] = useState();
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    if (routinesIsLoading) return;
-    const routines = Object.keys(_routines).map((key) => {
-      return { ..._routines[key], key };
-    });
-    
-    setRoutines(routines);
-  }, [_routines]);
+  const [selectedRoutine, setSelectedRoutine] = useState({});
+  const [listOfRoutines, setListOfRoutines] = useState([]);
+  const [selectedRoutineExercisesList, setSelectedRoutineExercisesList] =
+    useState([]);
 
-  const [routineList, setRoutineList] = useState([]);
   const [filterError, setFilterError] = useState();
   const [filterRoutinesByText, setFilterRoutinesByText] = useState("");
-  const [currentRoutine, setCurrentRoutine] = useState({});
   const [viewableItems, setViewableItems] = useState([]);
+
+  useEffect(() => {
+    if (routinesIsLoading || fetchingRoutineError || fetchingExercisesError)
+      return;
+    setRoutines([]);
+    setListOfRoutines([]);
+    setSelectedRoutineExercisesList([]);
+
+    if (!_routines) return;
+
+    setRoutines(
+      Object.keys(_routines).map((key) => ({
+        ..._routines[key],
+        key,
+        exercises: _routines[key]?.exercises || [],
+      }))
+    );
+  }, [_routines]);
 
   useEffect(() => {
     if (filterRoutinesByText == "") {
       setFilterError("");
       showCurrentSelectedRoutine();
-      setRoutineList(routines);
+      setListOfRoutines(routines);
       return;
     }
 
-    setRoutineList(() => {
+    setListOfRoutines(() => {
       const newData = routines.filter(
         (routine) =>
           routine.name
@@ -83,35 +87,49 @@ const Routines = ({ navigation }) => {
         return newData;
       }
       setFilterError("No routines match");
-      setRoutineList([]);
-      setCurrentRoutine({ exercises: [] });
+      setListOfRoutines([]);
+      setSelectedRoutine({ exercises: [] });
       return newData;
     });
   }, [filterRoutinesByText, routines]);
 
   useEffect(() => showCurrentSelectedRoutine(), [viewableItems]);
 
-  const handleRemoveExerciseFromRoutine = async ({index}) => {
-     
-    let newExercises = [...currentExerciseList]
-    newExercises.splice(index, 1)
+  useEffect(() => {
+    if (!selectedRoutine) return;
+    if (Object.keys(selectedRoutine).length === 0) return;
+    setSelectedRoutineExercisesList(() => {
+      return selectedRoutine.exercises.map((exercise, index) => {
+        const exerciseData = _exercises[exercise.exerciseID];
+        return {
+          ...selectedRoutine.exercises[index],
+          key: exercise.exerciseID,
+          name: exerciseData.name,
+        };
+      });
+    });
+  }, [selectedRoutine]);
+
+  const handleRemoveExerciseFromRoutine = async ({ index }) => {
+    let newExercises = [...selectedRoutineExercisesList];
+    newExercises.splice(index, 1);
     const newData = {
-      name: currentRoutine.name,
+      name: selectedRoutine.name,
       exercises: newExercises,
     };
 
     try {
-      await saveRoutine({ key: currentRoutine.key, routine: { ...newData } });
+      await saveRoutine({ key: selectedRoutine.key, routine: { ...newData } });
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const showCurrentSelectedRoutine = () => {
     const currentItem = viewableItems[0]?.item.key;
     if (currentItem == undefined) return;
     const routine = routines.find((sets) => sets.key == currentItem);
-    setCurrentRoutine(routine);
+    setSelectedRoutine(routine);
   };
 
   const onViewableItemsChanged = ({ viewableItems }) => {
@@ -120,7 +138,6 @@ const Routines = ({ navigation }) => {
   };
 
   const handleOnSaveRoutineOrder = async ({ data }) => {
-
     const exercisesReordered = data.map((exercise) => {
       return {
         notes: exercise.notes,
@@ -131,37 +148,56 @@ const Routines = ({ navigation }) => {
       };
     });
     const newData = {
-      name: currentRoutine.name,
+      name: selectedRoutine.name,
       exercises: exercisesReordered,
     };
 
     try {
-      await saveRoutine({ key: currentRoutine.key, routine: { ...newData } });
+      await saveRoutine({ key: selectedRoutine.key, routine: { ...newData } });
     } catch (e) {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    if (!currentRoutine) return;
-    if (Object.keys(currentRoutine).length === 0) return;
-    setCurrentExerciseList(() => {
-      return currentRoutine.exercises.map((exercise, index) => {
-        const exerciseData = _exercises[exercise.exerciseID];
-        return {
-          ...currentRoutine.exercises[index],
-          key: exercise.exerciseID,
-          name: exerciseData.name,
-        };
-      });
-    });
-  }, [currentRoutine]);
 
   const viewabilityConfig = { itemVisiblePercentThreshold: 100 };
 
   const viewabilityConfigCallbackPairs = useRef([
     { viewabilityConfig, onViewableItemsChanged },
   ]);
+
+  const onChangeRoutineName = (routine) => {
+    navigation.navigate("Routine Editor", { routine });
+  };
+
+  const handleOnDeleteRoutine = () => {
+    navigation.navigate("Routine Editor", {
+      routine: selectedRoutine,
+      promptDelete: true,
+    });
+  };
+
+  const onExecuteRoutine = () => {
+    if (Object.keys(workout).length > 0) {
+      setShowModal(true);
+    } else {
+      startNewWorkout();
+    }
+  };
+
+  const startNewWorkout = () => {
+    setShowModal(false);
+    const date = new Date();
+    dispatch(
+      setWorkout({
+        startTime: date.getTime(),
+        duration: 0,
+        routine: selectedRoutine,
+      })
+    );
+    navigation.navigate("WorkoutNavigator", {
+      screen: "Workout",
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -171,8 +207,26 @@ const Routines = ({ navigation }) => {
         >
           <ActivityIndicator size="large" color={colors.foreground.primary} />
         </View>
+      ) : routines?.length == 0 ? (
+        <View style={styles.noRoutinesContainer}>
+          <CustomText
+            style={styles.noRoutineText}
+            text="You have no routines. Create a new one using the add button in the header."
+          />
+        </View>
       ) : (
         <View style={styles.routineMainContianer}>
+          {showModal ? (
+            <StartWorkout
+              showModal={showModal}
+              onStartNewWorkout={startNewWorkout}
+              onClose={() => {
+                setShowModal(false);
+              }}
+            />
+          ) : (
+            <></>
+          )}
           <View style={styles.searchBox}>
             <InputTextLabeled
               error={filterError}
@@ -188,30 +242,39 @@ const Routines = ({ navigation }) => {
               containerBackgroundColor={colors.background.primary}
             />
           </View>
-          <View>
-            <FlatList
-              data={routineList}
-              horizontal={true}
-              contentContainerStyle={styles.horizontalGalleryContent}
-              snapToAlignment="start"
-              decelerationRate={"fast"}
-              snapToInterval={Dimensions.get("window").width - 45 + 15}
-              showsHorizontalScrollIndicator={false}
-              viewabilityConfigCallbackPairs={
-                viewabilityConfigCallbackPairs.current
-              }
-              renderItem={({ item, index }) =>
-                RoutineItem({ item, index, navigation })
-              }
-            />
-          </View>
+
+          {
+            <View>
+              <FlatList
+                data={listOfRoutines}
+                horizontal={true}
+                contentContainerStyle={styles.horizontalGalleryContent}
+                snapToAlignment="start"
+                decelerationRate={"fast"}
+                snapToInterval={Dimensions.get("window").width - 45 + 15}
+                showsHorizontalScrollIndicator={false}
+                viewabilityConfigCallbackPairs={
+                  viewabilityConfigCallbackPairs.current
+                }
+                renderItem={({ item, index }) =>
+                  RoutineItem({
+                    item,
+                    index,
+                    navigation,
+                    onChangeRoutineName,
+                    onExecuteRoutine,
+                  })
+                }
+              />
+            </View>
+          }
           <View style={styles.routineContainer}>
             <View style={styles.routines}>
               <DraggableFlatList
                 contentContainerStyle={styles.exerciseList}
                 onDragEnd={handleOnSaveRoutineOrder}
-                data={currentExerciseList}
-                keyExtractor={(item) => item.key}
+                data={selectedRoutineExercisesList}
+                keyExtractor={(item, index) => item.key + index}
                 renderItem={({ item, getIndex, drag }) =>
                   ExerciseItemForRoutine({
                     item,
@@ -219,44 +282,53 @@ const Routines = ({ navigation }) => {
                     navigation,
                     onPress: ({ exercise }) =>
                       navigation.navigate("Exercises Sets", {
-                        removeExercise: ()=>handleRemoveExerciseFromRoutine({index: getIndex()}),
+                        handleRemoveExerciseFromRoutine,
                         exercise,
-                        routine: currentRoutine,
+                        routine: selectedRoutine,
                         index: getIndex(),
                       }),
                   })
                 }
               />
             </View>
-            <View style={styles.newExerciseItem}>
+            {filterError ? (
+              <></>
+            ) : (
+              <View style={styles.newExerciseItem}>
+                <StandarIconButton
+                  onPress={() =>
+                    navigation.navigate("Exercise Explorer", {
+                      routine: selectedRoutine,
+                    })
+                  }
+                  icon={icons.add}
+                  text="add exercise"
+                  iconTint={colors.foreground.informative}
+                  textProperties={{ color: colors.foreground.informative }}
+                  buttonProperties={{
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "flex-start",
+                    paddingLeft: 10,
+                  }}
+                />
+              </View>
+            )}
+          </View>
+          {filterError ? (
+            <></>
+          ) : (
+            <View style={styles.deleteIconContainer}>
               <StandarIconButton
-                onPress={() =>
-                  navigation.navigate("Exercise Explorer", {
-                    routine: currentRoutine,
-                  })
-                }
-                icon={icons.add}
-                text="add exercise"
-                iconTint={colors.foreground.informative}
-                textProperties={{ color: colors.foreground.informative }}
-                buttonProperties={{
-                  width: "100%",
-                  height: "100%",
-                  justifyContent: "flex-start",
-                  paddingLeft: 10,
-                }}
+                onPress={handleOnDeleteRoutine}
+                icon={icons.delete}
+                text="Delete Routine"
+                iconTint={colors.foreground.primary}
+                textProperties={{ color: colors.foreground.primary }}
+                buttonProperties={{ width: "90%" }}
               />
             </View>
-          </View>
-          <View style={styles.deleteIconContainer}>
-            <StandarIconButton
-              icon={icons.delete}
-              text="Delete Routine"
-              iconTint={colors.foreground.primary}
-              textProperties={{ color: colors.foreground.primary }}
-              buttonProperties={{ width: "90%" }}
-            />
-          </View>
+          )}
         </View>
       )}
     </View>
