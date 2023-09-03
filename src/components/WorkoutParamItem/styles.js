@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
         columnGap: 10,
     },
     inputParamValue:{
-        width: 120,
+        width: 170,
         height: 35,
         borderWidth: 2,
         borderColor: colors.background.secondary,
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     },
     prevValueText:{
         color: colors.foreground.white,
-        fontSize: 12,
+        fontSize: 15,
         marginTop: 15
     },
     finishSetButton:{

@@ -182,16 +182,14 @@ const QuickTipButton = ({options, callback}) => {
   const [thisBtnPosition, setThisBtnPosition] = useState()
   const buttonRef = useRef();
 
-  useEffect(() => {
-    setTimeout(() => {
-      const button = buttonRef.current;
-      if (!button) return
-      button.measure((fx, fy, width, height, px, py) => {
-        if (px !== null) 
-        setThisBtnPosition({ x: px + 15, y: py + 30});
-      });
-    }, 0);
-  }, []);
+  const measure = () => {
+    const button = buttonRef.current;
+    button.measure((fx, fy, width, height, px, py) => {
+      if (px == null) return
+      setThisBtnPosition({ x: px + 15, y: py + 30});
+    })
+  }
+
 
   const showQuickTip = ()=>{
     quickTip.setCallback({f: callback})
@@ -201,7 +199,7 @@ const QuickTipButton = ({options, callback}) => {
   }
 
   return (
-    <View ref={buttonRef}>
+    <View ref={buttonRef} onLayout={measure}>
       <AddButton
         icon={icons.bolt}
         iconStyle={{ width: 20, height: 20, tintColor: "white" }}

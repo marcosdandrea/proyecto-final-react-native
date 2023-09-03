@@ -1,38 +1,47 @@
 {
   "expo": {
-    "name": "proyecto-final",
-    "slug": "proyecto-final",
+    "name": "fitApp",
+    "slug": "fitapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true,
+      "bundleIdentifier": "com.fitapp.fitapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fitapp.fitapp",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "b359b71f-b857-42ad-b53b-4e33f2f54156"
+        "projectId": "2b6fbd34-f709-4652-817c-445b02c1caa6"
       }
     },
-    "updates":{
+    "updates": {
       "useClassicUpdates": true
-    }
+    },
+    "owner": "marcosd87"
   }
 }

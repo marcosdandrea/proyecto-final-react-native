@@ -48,6 +48,7 @@ const Workout = ({navigation}) => {
   const [currentSet, setCurrentSet] = useState(0);
   const [currentSetDetails, setCurrentSetDetails] = useState(undefined);
   const [currentSetWeight, setCurrentSetWeight] = useState(0);
+  const [currentReps, setCurrentReps] = useState(0)
 
   const [workoutFinished, setWorkoutFinished] = useState(false);
   const [enableRestTime, setEnableRestTime] = useState(false);
@@ -162,6 +163,7 @@ const Workout = ({navigation}) => {
                 currentExercise={currentExercise}
                 currentSet={currentSet}
                 currentSetWeight={currentSetWeight}
+                currentReps = {workout.routine.exercises[currentExerciseIndex]}
                 setCurrentSetWeight={setCurrentSetWeight}
                 onChangeSet={handleOnChangeSet}
                 onCompleteSet={handleOnCompleteSet}

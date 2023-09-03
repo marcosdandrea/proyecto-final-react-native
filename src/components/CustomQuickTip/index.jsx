@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import styles from "./styles";
-import { createContext, forwardRef, useEffect, useRef, useState } from "react";
+import { createContext, useState } from "react";
 import { icons } from "../../theme/icons";
 import CustomText from "../CustomText";
 
@@ -19,7 +19,7 @@ const MenuItem = ({ item, onPress }) => {
   );
 };
 
-const FloatingMenu = ({ optionList, show, openPoint, onPressItem }) => {
+const FloatingMenu = ({ optionList, show, openPoint = {x:0, y: 0}, onPressItem }) => {
   return (
     <View
       style={{
@@ -53,8 +53,7 @@ const CustomQuickTip = ({ children }) => {
 
   return (
     <QuickTipContext.Provider
-      value={{ setShow, setBtnPosition, setCallback, setOptionList }}
-    >
+      value={{ setShow, setBtnPosition, setCallback, setOptionList }}>
       <FloatingMenu
         show={show}
         optionList={optionList}

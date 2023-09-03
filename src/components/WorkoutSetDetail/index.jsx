@@ -14,6 +14,7 @@ const WorkoutSetDetail = ({
   isLastRoutineExercise,
   currentSetWeight,
   setCurrentSetWeight,
+  currentReps,
 }) => {
   const handleOnCompleteSet = () => {
     onCompleteSet({
@@ -61,6 +62,7 @@ const WorkoutSetDetail = ({
               currentSetDetails={currentSetDetails}
               currentWeigth={currentSetWeight}
               setCurrentWeigth={setCurrentSetWeight}
+              currentReps={currentReps}
               handleOnCompleteSet={handleOnCompleteSet}
               unit={"kg"}
               incrementStep={1.25}

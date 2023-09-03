@@ -16,6 +16,7 @@ const WorkoutParamItem = ({
   handleOnCompleteSet,
   currentWeigth,
   setCurrentWeigth,
+  currentReps
 }) => {
 
   const { workout } = useSelector((store) => store.workout) || {};
@@ -54,7 +55,7 @@ const WorkoutParamItem = ({
 
   return (
     <View style={styles.container}>
-      <CustomText text={"Last: '14 kg'"} style={styles.prevValueText} />
+      <CustomText text={`Reps: ${currentReps.sets[currentSet-1]}`} style={styles.prevValueText} />
       {
         setDone ?
         <View style={styles.badge}>
@@ -78,7 +79,7 @@ const WorkoutParamItem = ({
         />
         <TextInput
           style={styles.inputParamValue}
-          value={String(currentWeigth)}
+          value={`${String(currentWeigth)} kg`}
         />
         <IconButton
           onPress={() => handleOnChangeValue({ increment: true })}
